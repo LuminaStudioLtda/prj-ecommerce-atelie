@@ -1,0 +1,110 @@
+"use client";
+
+import { useState, type FormEvent } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
+
+type FormErrors = Partial<Record<"email" | "password", string>>;
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MOCK_SUBMIT_DELAY_MS = 800;
+
+function validate(email: string, password: string): FormErrors {
+  const errors: FormErrors = {};
+
+  if (!email.trim()) {
+    errors.email = "Informe seu email.";
+  } else if (!EMAIL_REGEX.test(email)) {
+    errors.email = "Informe um email válido.";
+  }
+
+  if (!password) {
+    errors.password = "Informe sua senha.";
+  } else if (password.length < 6) {
+    errors.password = "A senha deve ter pelo menos 6 caracteres.";
+  }
+
+  return errors;
+}
+
+export function LoginForm() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const validationErrors = validate(email, password);
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length > 0) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    await new Promise((resolve) => setTimeout(resolve, MOCK_SUBMIT_DELAY_MS));
+    setIsSubmitting(false);
+    setSubmitSuccess(true);
+  }
+
+  return (
+    <Card className="w-full max-w-sm">
+      <CardHeader>
+        <CardTitle>Entrar</CardTitle>
+        <CardDescription>Acesse sua conta do Ateliê.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        {submitSuccess ? (
+          <p className="text-sm text-foreground">
+            Login realizado com sucesso.
+          </p>
+        ) : (
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit} noValidate>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                autoComplete="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                aria-invalid={Boolean(errors.email)}
+              />
+              {errors.email ? (
+                <p className="text-sm text-destructive">{errors.email}</p>
+              ) : null}
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="password">Senha</Label>
+              <Input
+                id="password"
+                type="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                aria-invalid={Boolean(errors.password)}
+              />
+              {errors.password ? (
+                <p className="text-sm text-destructive">{errors.password}</p>
+              ) : null}
+            </div>
+            <Button type="submit" disabled={isSubmitting} className="mt-2">
+              {isSubmitting ? "Entrando..." : "Entrar"}
+            </Button>
+          </form>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
