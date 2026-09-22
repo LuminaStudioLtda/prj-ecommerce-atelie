@@ -1,7 +1,14 @@
 import Link from "next/link";
 import { Heart, Search, ShoppingBag, User } from "lucide-react";
 
-const PLACEHOLDER_NAV_LINKS = ["Loja", "Coleções", "Sob Medida", "Sobre", "Contato"];
+const NAV_LINKS = [
+  { label: "Início", href: "/inicio" },
+  { label: "Loja", href: "/loja" },
+  { label: "Coleções", href: "/colecoes" },
+  { label: "Sob Medida", href: "/sob-medida" },
+  { label: "Sobre", href: "/sobre" },
+  { label: "Contato", href: "/contato" },
+];
 
 export function SiteHeader() {
   return (
@@ -10,31 +17,34 @@ export function SiteHeader() {
         FRETE GRÁTIS EM PEDIDOS ACIMA DE R$ 350 • PEÇAS FEITAS À MÃO SOB DEMANDA
       </div>
       <div className="flex items-center justify-between gap-4 border-b border-border bg-background px-6 py-4">
-        <Link href="/home" className="font-serif text-2xl italic text-foreground">
+        <Link href="/inicio" className="font-serif text-2xl italic text-foreground">
           Ateliê
         </Link>
         <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
-          <Link href="/home" className="text-foreground hover:text-primary">
-            Início
-          </Link>
-          {PLACEHOLDER_NAV_LINKS.map((label) => (
-            <span key={label} className="text-muted-foreground">
+          {NAV_LINKS.map(({ label, href }) => (
+            <Link key={href} href={href} className="text-foreground hover:text-primary">
               {label}
-            </span>
+            </Link>
           ))}
         </nav>
         <div className="flex items-center gap-4">
           <Search className="size-5 text-foreground" role="img" aria-label="Buscar" />
-          <Heart className="size-5 text-foreground" role="img" aria-label="Favoritos" />
-          <div className="relative">
-            <ShoppingBag className="size-5 text-foreground" role="img" aria-label="Carrinho" />
+          <Link href="/favoritos" aria-label="Favoritos">
+            <Heart className="size-5 text-foreground" aria-hidden="true" />
+          </Link>
+          <Link href="/carrinho" className="relative" aria-label="Carrinho">
+            <ShoppingBag className="size-5 text-foreground" aria-hidden="true" />
             <span className="absolute -top-2 -right-2 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground">
               0
             </span>
-          </div>
-          <div className="flex size-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
-            <User className="size-4" role="img" aria-label="Conta" />
-          </div>
+          </Link>
+          <Link
+            href="/perfil"
+            className="flex size-8 items-center justify-center rounded-full bg-primary text-primary-foreground"
+            aria-label="Perfil"
+          >
+            <User className="size-4" aria-hidden="true" />
+          </Link>
         </div>
       </div>
     </header>
