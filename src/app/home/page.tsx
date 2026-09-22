@@ -9,15 +9,16 @@ import { useSessionStore } from "@/store/use-session-store";
 export default function HomePage() {
   const router = useRouter();
   const isAuthenticated = useSessionStore((state) => state.isAuthenticated);
+  const hasHydrated = useSessionStore((state) => state.hasHydrated);
   const logout = useSessionStore((state) => state.logout);
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (hasHydrated && !isAuthenticated) {
       router.replace("/");
     }
-  }, [isAuthenticated, router]);
+  }, [hasHydrated, isAuthenticated, router]);
 
-  if (!isAuthenticated) {
+  if (!hasHydrated || !isAuthenticated) {
     return null;
   }
 
