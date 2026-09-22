@@ -29,7 +29,7 @@ export default function HomePage() {
   return (
     <div className="flex flex-1 flex-col">
       <SiteHeader />
-      <div className="flex flex-1 flex-col items-center justify-center gap-4 bg-muted/40 p-6 text-center">
+      <div className="flex flex-1 flex-col items-center justify-center gap-4 bg-muted p-6 text-center">
         <h1 className="text-2xl font-semibold">Bem-vindo(a)!</h1>
         <p className="text-sm text-muted-foreground">
           Você está autenticado(a) no Ateliê.
