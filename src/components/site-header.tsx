@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Heart, Search, ShoppingBag, User } from "lucide-react";
 import { useSessionStore } from "@/store/use-session-store";
+import { useCartStore } from "@/store/use-cart-store";
 
 const NAV_LINKS = [
   { label: "Início", href: "/inicio" },
@@ -16,6 +17,7 @@ const NAV_LINKS = [
 export function SiteHeader() {
   const isAuthenticated = useSessionStore((state) => state.isAuthenticated);
   const profileHref = isAuthenticated ? "/home" : "/perfil";
+  const cartItemCount = useCartStore((state) => state.itemCount);
 
   return (
     <header className="w-full">
@@ -41,7 +43,7 @@ export function SiteHeader() {
           <Link href="/carrinho" className="relative" aria-label="Carrinho">
             <ShoppingBag className="size-5 text-foreground" aria-hidden="true" />
             <span className="absolute -top-2 -right-2 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground">
-              0
+              {cartItemCount}
             </span>
           </Link>
           <Link
