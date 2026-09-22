@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { SiteHeader } from "@/components/site-header";
 import { useSessionStore } from "@/store/use-session-store";
 
 export default function HomePage() {
@@ -26,14 +27,17 @@ export default function HomePage() {
   }
 
   return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-4 bg-muted/40 p-6 text-center">
-      <h1 className="text-2xl font-semibold">Bem-vindo(a)!</h1>
-      <p className="text-sm text-muted-foreground">
-        Você está autenticado(a) no Ateliê.
-      </p>
-      <Button variant="outline" onClick={handleLogout}>
-        Sair
-      </Button>
+    <div className="flex flex-1 flex-col">
+      <SiteHeader />
+      <div className="flex flex-1 flex-col items-center justify-center gap-4 bg-muted/40 p-6 text-center">
+        <h1 className="text-2xl font-semibold">Bem-vindo(a)!</h1>
+        <p className="text-sm text-muted-foreground">
+          Você está autenticado(a) no Ateliê.
+        </p>
+        <Button variant="outline" onClick={handleLogout}>
+          Sair
+        </Button>
+      </div>
     </div>
   );
 }
