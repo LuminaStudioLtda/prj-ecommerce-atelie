@@ -1,10 +1,24 @@
 # Ateliê E-commerce
 
-A Next.js platform for a public storefront and an administrative workspace. The public module covers the catalogue, product pages, cart, checkout, and order tracking. The administrative module supports supplies, technical sheets, pricing, inventory, production, and order operations.
+A Next.js application for a public storefront and an administrative workspace.
+The storefront provides the catalogue, product pages, cart, checkout, and order
+tracking. The workspace supports supplies, technical sheets, pricing,
+inventory, production, and order operations.
 
 ## Technology
 
-Next.js App Router, React, TypeScript, Tailwind CSS, shadcn/ui, Zustand, MySQL, and Docker. Use **pnpm only**; npm and Yarn are not supported.
+- Next.js App Router and React
+- TypeScript
+- Tailwind CSS and shadcn/ui
+- Zustand
+- MySQL and Docker
+
+Use pnpm exclusively. npm and Yarn are not supported.
+
+## Prerequisites
+
+- Node.js 22 or later
+- pnpm 11.15.1
 
 ## Getting started
 
@@ -17,7 +31,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Quality checks
 
-Run these commands before opening a pull request:
+Run all checks before opening a pull request:
 
 ```bash
 pnpm lint
@@ -25,30 +39,77 @@ pnpm typecheck
 pnpm build
 ```
 
-Husky runs lint-staged before every commit. For staged application source files, it runs lint and type checking. GitHub Actions repeats lint, type checking, and the production build in a clean environment.
+Husky runs lint-staged before every commit. GitHub Actions runs lint, type
+checking, and the production build in a clean environment.
 
-## Branching and delivery
+## Git workflow
 
 ```text
-feat/* | fix/* | chore/*  →  hml  →  main
+feat/* | fix/* | chore/* | hotfix/* -> hml -> main
 ```
 
-- `main` is the protected production branch. Changes reach it only through a pull request from `hml`.
-- `hml` is the protected staging and QA branch. Create working branches from it and open pull requests back to it.
-- Use `feat/`, `fix/`, `chore/`, or `hotfix/` prefixes. Keep branches and pull requests focused on one deliverable.
-- Require a green CI run and resolved review comments before merging. Prefer squash merges.
-- Use Conventional Commits in English. Examples: `feat: add product card`, `fix: prevent empty cart checkout`, and `chore: update project tooling`.
+- `main` is the protected production branch.
+- `hml` is the protected staging and QA branch.
+- Create working branches from `hml` and open pull requests back to `hml`.
+- Promote validated changes from `hml` to `main` through a pull request.
+- Keep each branch and pull request limited to one deliverable.
+- Merge only after CI passes and review feedback is resolved. Prefer squash
+  merges.
+
+Create a branch from the latest staging state:
+
+```bash
+git switch hml
+git pull --ff-only origin hml
+git switch -c feat/catalog-filters
+git push -u origin feat/catalog-filters
+```
+
+Use one of these branch prefixes:
+
+- `feat/` for a new user-facing capability.
+- `fix/` for a bug fix.
+- `chore/` for maintenance or tooling work.
+- `hotfix/` for an urgent production fix.
+
+## Commit conventions
+
+Use Conventional Commits in English:
+
+```text
+<type>(<scope>): <imperative summary>
+```
+
+The scope is optional. Use a concise, lowercase imperative summary without a
+trailing period.
+
+```text
+feat(catalog): add product filters
+fix(cart): prevent checkout with an empty cart
+docs: clarify the release workflow
+ci: run quality checks for hml
+chore: update development dependencies
+```
 
 ## Code conventions
 
-- Follow the simplified feature-based structure documented in [ARCHITECTURE.md](ARCHITECTURE.md).
-- Keep domain-specific code inside `src/features/<feature-name>/`; promote code only when it is reused by two or more features.
-- Put shared UI in `src/components`, shadcn/ui primitives in `src/components/ui`, reusable hooks in `src/hooks`, infrastructure helpers in `src/lib`, and cross-feature Zustand stores in `src/store`.
-- Keep types colocated with their usage. Do not create a generic shared types folder.
-- Import the concrete file directly. Barrel files (`index.ts` or `index.tsx` used only for re-exports) are not allowed.
-- Keep business rules out of pages, layouts, and visual UI components. Database access belongs in the responsible feature service.
-- Use strict TypeScript. Explicit `any`, direct edits to `node_modules`, committed secrets, and circular feature dependencies are prohibited.
+- Follow the feature-based structure in [ARCHITECTURE.md](ARCHITECTURE.md).
+- Keep domain code in `src/features/<feature-name>/`. Promote code only when
+  two or more features reuse it.
+- Put shared UI in `src/components`, shadcn/ui primitives in
+  `src/components/ui`, reusable hooks in `src/hooks`, infrastructure helpers in
+  `src/lib`, and cross-feature Zustand stores in `src/store`.
+- Keep types close to their usage. Do not create a generic shared types folder.
+- Import concrete files directly. Re-export-only `index.ts` and `index.tsx`
+  barrel files are not allowed.
+- Keep business rules out of pages, layouts, and visual UI components. Database
+  access belongs in the responsible feature service.
+- Use strict TypeScript. Explicit `any`, direct edits to `node_modules`,
+  committed secrets, and circular feature dependencies are prohibited.
 
 ## Documentation
 
-[ARCHITECTURE.md](ARCHITECTURE.md) is the authoritative technical reference for project structure and conventions. See [CONTRIBUTING.md](CONTRIBUTING.md) for the contribution workflow and [docs/OPERACAO_E_GOVERNANCA.md](docs/OPERACAO_E_GOVERNANCA.md) for branch protection and deployment guidance.
+[ARCHITECTURE.md](ARCHITECTURE.md) is the source of truth for structure and
+technical conventions. See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution
+guidelines and [docs/OPERACAO_E_GOVERNANCA.md](docs/OPERACAO_E_GOVERNANCA.md)
+for branch protection and deployment guidance.
