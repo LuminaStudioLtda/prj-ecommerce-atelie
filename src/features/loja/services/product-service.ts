@@ -1,5 +1,11 @@
-import { CATEGORIES, MATERIALS } from "../constants";
-import type { Product, ProductCategory, ProductMaterial } from "../types";
+import { CATEGORIES, MATERIALS } from "@/features/loja/constants";
+import type {
+  Product,
+  ProductCategory,
+  ProductFilters,
+  ProductMaterial,
+  SortOption,
+} from "@/features/loja/types";
 
 export const PRODUCTS: Product[] = [
   {
@@ -272,3 +278,39 @@ export const MATERIAL_COUNTS: Record<ProductMaterial, number> = MATERIALS.reduce
   },
   {} as Record<ProductMaterial, number>,
 );
+
+function matchesFilters(product: Product, filters: ProductFilters): boolean {
+  if (filters.categories.length > 0 && !filters.categories.includes(product.category)) {
+    return false;
+  }
+  if (filters.materials.length > 0 && !filters.materials.includes(product.material)) {
+    return false;
+  }
+  if (
+    filters.colorTones.length > 0 &&
+    !product.colorTones.some((tone) => filters.colorTones.includes(tone))
+  ) {
+    return false;
+  }
+  if (filters.productionMode !== "todas" && product.productionMode !== filters.productionMode) {
+    return false;
+  }
+  if (product.price < filters.minPrice || product.price > filters.maxPrice) {
+    return false;
+  }
+  return true;
+}
+
+export function filterProducts(products: Product[], filters: ProductFilters): Product[] {
+  return products.filter((product) => matchesFilters(product, filters));
+}
+
+export function sortProducts(products: Product[], sort: SortOption): Product[] {
+  if (sort === "menor-preco") {
+    return [...products].sort((a, b) => a.price - b.price);
+  }
+  if (sort === "maior-preco") {
+    return [...products].sort((a, b) => b.price - a.price);
+  }
+  return products;
+}

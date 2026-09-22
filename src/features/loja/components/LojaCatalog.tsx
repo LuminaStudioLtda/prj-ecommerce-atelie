@@ -1,20 +1,25 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { MAX_PRICE, MIN_PRICE, PRODUCTS_PER_PAGE } from "../constants";
-import { CATEGORY_COUNTS, MATERIAL_COUNTS, PRODUCTS } from "../services/product-service";
+import { MAX_PRICE, MIN_PRICE, PRODUCTS_PER_PAGE } from "@/features/loja/constants";
+import {
+  filterProducts,
+  sortProducts,
+  CATEGORY_COUNTS,
+  MATERIAL_COUNTS,
+  PRODUCTS,
+} from "@/features/loja/services/product-service";
 import type {
-  Product,
   ProductCategory,
   ProductColorTone,
   ProductFilters,
   ProductMaterial,
   ProductionModeFilter,
   SortOption,
-} from "../types";
-import { AppliedFilters } from "./AppliedFilters";
-import { FilterSidebar } from "./FilterSidebar";
-import { ProductCard } from "./ProductCard";
+} from "@/features/loja/types";
+import { AppliedFilters } from "@/features/loja/components/AppliedFilters";
+import { FilterSidebar } from "@/features/loja/components/FilterSidebar";
+import { ProductCard } from "@/features/loja/components/ProductCard";
 
 const DEFAULT_FILTERS: ProductFilters = {
   categories: [],
@@ -25,45 +30,13 @@ const DEFAULT_FILTERS: ProductFilters = {
   maxPrice: MAX_PRICE,
 };
 
-function matchesFilters(product: Product, filters: ProductFilters): boolean {
-  if (filters.categories.length > 0 && !filters.categories.includes(product.category)) {
-    return false;
-  }
-  if (filters.materials.length > 0 && !filters.materials.includes(product.material)) {
-    return false;
-  }
-  if (
-    filters.colorTones.length > 0 &&
-    !product.colorTones.some((tone) => filters.colorTones.includes(tone))
-  ) {
-    return false;
-  }
-  if (filters.productionMode !== "todas" && product.productionMode !== filters.productionMode) {
-    return false;
-  }
-  if (product.price < filters.minPrice || product.price > filters.maxPrice) {
-    return false;
-  }
-  return true;
-}
-
-function sortProducts(products: Product[], sort: SortOption): Product[] {
-  if (sort === "menor-preco") {
-    return [...products].sort((a, b) => a.price - b.price);
-  }
-  if (sort === "maior-preco") {
-    return [...products].sort((a, b) => b.price - a.price);
-  }
-  return products;
-}
-
 export function LojaCatalog() {
   const [filters, setFilters] = useState<ProductFilters>(DEFAULT_FILTERS);
   const [sort, setSort] = useState<SortOption>("mais-recentes");
   const [visibleCount, setVisibleCount] = useState(PRODUCTS_PER_PAGE);
 
   const filteredProducts = useMemo(
-    () => sortProducts(PRODUCTS.filter((product) => matchesFilters(product, filters)), sort),
+    () => sortProducts(filterProducts(PRODUCTS, filters), sort),
     [filters, sort],
   );
 

@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { Heart, ImageIcon } from "lucide-react";
-import { COLOR_TONE_SWATCH_CLASS } from "../constants";
-import type { Product } from "../types";
+import { COLOR_TONE_SWATCH_CLASS } from "@/features/loja/constants";
+import type { Product } from "@/features/loja/types";
 
 type ProductCardProps = {
   product: Product;

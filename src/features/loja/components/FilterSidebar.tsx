@@ -8,14 +8,14 @@ import {
   MATERIALS,
   MAX_PRICE,
   MIN_PRICE,
-} from "../constants";
+} from "@/features/loja/constants";
 import type {
   ProductCategory,
   ProductColorTone,
   ProductFilters,
   ProductMaterial,
   ProductionModeFilter,
-} from "../types";
+} from "@/features/loja/types";
 
 type FilterSidebarProps = {
   filters: ProductFilters;

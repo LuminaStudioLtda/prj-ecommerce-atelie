@@ -1,7 +1,12 @@
 "use client";
 
 import { X } from "lucide-react";
-import type { ProductCategory, ProductColorTone, ProductFilters, ProductMaterial } from "../types";
+import type {
+  ProductCategory,
+  ProductColorTone,
+  ProductFilters,
+  ProductMaterial,
+} from "@/features/loja/types";
 
 type AppliedFiltersProps = {
   filters: ProductFilters;
