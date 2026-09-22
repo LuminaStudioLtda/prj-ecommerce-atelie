@@ -2,9 +2,9 @@ name: Qualidade
 
 on:
   pull_request:
-    branches: [main, homolog]
+    branches: [main, hml]
   push:
-    branches: [main, homolog]
+    branches: [main, hml]
 
 concurrency:
   group: quality-${{ github.workflow }}-${{ github.ref }}
@@ -24,7 +24,7 @@ jobs:
       - name: Configurar pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 10
+          version: 11.15.1
 
       - name: Configurar Node.js
         uses: actions/setup-node@v6
