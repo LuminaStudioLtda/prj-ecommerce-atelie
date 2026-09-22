@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Heart, ImageIcon } from "lucide-react";
-import { COLOR_TONE_SWATCH_CLASS } from "@/features/loja/constants";
+import { BADGE_STYLE_CLASS, COLOR_TONE_SWATCH_CLASS } from "@/features/loja/constants";
 import type { Product } from "@/features/loja/types";
 
 type ProductCardProps = {
@@ -23,7 +23,9 @@ export function ProductCard({ product }: ProductCardProps) {
     <div className="flex flex-col gap-2">
       <div className="relative flex aspect-square items-center justify-center rounded-lg bg-gray-100">
         {product.badge ? (
-          <span className="absolute top-2 left-2 rounded-full bg-background px-2 py-1 text-[10px] font-medium tracking-wide text-foreground">
+          <span
+            className={`absolute top-2 left-2 rounded-full px-2 py-1 text-[10px] font-medium tracking-wide ${BADGE_STYLE_CLASS[product.badge]}`}
+          >
             {product.badge.toUpperCase()}
           </span>
         ) : null}

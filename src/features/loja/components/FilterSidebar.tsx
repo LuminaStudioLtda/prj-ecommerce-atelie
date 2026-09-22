@@ -69,6 +69,7 @@ export function FilterSidebar({
               type="checkbox"
               checked={filters.categories.includes(category)}
               onChange={() => onToggleCategory(category)}
+              className="[accent-color:#4a5d3a]"
             />
             {category} ({categoryCounts[category]})
           </label>
@@ -83,6 +84,7 @@ export function FilterSidebar({
               type="checkbox"
               checked={filters.materials.includes(material)}
               onChange={() => onToggleMaterial(material)}
+              className="[accent-color:#4a5d3a]"
             />
             {material} ({materialCounts[material]})
           </label>
@@ -140,6 +142,7 @@ export function FilterSidebar({
             name="production-mode"
             checked={filters.productionMode === "todas"}
             onChange={() => onProductionModeChange("todas")}
+            className="[accent-color:#4a5d3a]"
           />
           Todas as modalidades
         </label>
@@ -149,6 +152,7 @@ export function FilterSidebar({
             name="production-mode"
             checked={filters.productionMode === "pronta-entrega"}
             onChange={() => onProductionModeChange("pronta-entrega")}
+            className="[accent-color:#4a5d3a]"
           />
           Pronta Entrega
         </label>
@@ -158,6 +162,7 @@ export function FilterSidebar({
             name="production-mode"
             checked={filters.productionMode === "sob-demanda"}
             onChange={() => onProductionModeChange("sob-demanda")}
+            className="[accent-color:#4a5d3a]"
           />
           Feito sob Demanda
         </label>

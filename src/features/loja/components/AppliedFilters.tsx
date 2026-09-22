@@ -58,7 +58,7 @@ export function AppliedFilters({
           key={tone}
           type="button"
           onClick={() => onRemoveColorTone(tone)}
-          className="flex items-center gap-1 rounded-full bg-secondary px-3 py-1 text-xs text-secondary-foreground"
+          className="flex items-center gap-1 rounded-full bg-primary/15 px-3 py-1 text-xs text-foreground"
         >
           Tom: {tone}
           <X className="size-3" aria-hidden="true" />
