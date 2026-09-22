@@ -23,7 +23,7 @@ O hook de pré-commit executa lint e checagem de tipos para arquivos de aplicaç
 ## Padrões
 
 - TypeScript estrito; `any` explícito é erro.
-- Componentes reutilizáveis ficam em `src/components`; componentes gerados pelo shadcn/ui em `src/components/ui`.
+- Componentes reutilizáveis entre domínios ficam em `src/components`; componentes gerados pelo shadcn/ui em `src/components/ui`.
 - Use o alias `@/` para imports internos.
-- Não altere componentes `ui` sem necessidade: prefira compor ou criar um componente de domínio em `src/components`.
+- Não altere componentes `ui` sem necessidade: prefira compor ou criar um componente de domínio dentro da feature correspondente em `src/features`.
 - O PR deve ter uma única intenção. Mudanças de escopo exigem nova issue/cartão.
