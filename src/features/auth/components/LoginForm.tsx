@@ -15,21 +15,23 @@ import {
 type FormErrors = Partial<Record<"email" | "password", string>>;
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MIN_PASSWORD_LENGTH = 6;
 const MOCK_SUBMIT_DELAY_MS = 800;
 
 function validate(email: string, password: string): FormErrors {
   const errors: FormErrors = {};
+  const trimmedEmail = email.trim();
 
-  if (!email.trim()) {
+  if (!trimmedEmail) {
     errors.email = "Informe seu email.";
-  } else if (!EMAIL_REGEX.test(email)) {
+  } else if (!EMAIL_REGEX.test(trimmedEmail)) {
     errors.email = "Informe um email válido.";
   }
 
   if (!password) {
     errors.password = "Informe sua senha.";
-  } else if (password.length < 6) {
-    errors.password = "A senha deve ter pelo menos 6 caracteres.";
+  } else if (password.length < MIN_PASSWORD_LENGTH) {
+    errors.password = `A senha deve ter pelo menos ${MIN_PASSWORD_LENGTH} caracteres.`;
   }
 
   return errors;
@@ -66,7 +68,7 @@ export function LoginForm() {
       </CardHeader>
       <CardContent>
         {submitSuccess ? (
-          <p className="text-sm text-foreground">
+          <p className="text-sm text-foreground" role="status">
             Login realizado com sucesso.
           </p>
         ) : (
@@ -80,9 +82,12 @@ export function LoginForm() {
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 aria-invalid={Boolean(errors.email)}
+                aria-describedby={errors.email ? "email-error" : undefined}
               />
               {errors.email ? (
-                <p className="text-sm text-destructive">{errors.email}</p>
+                <p className="text-sm text-destructive" id="email-error">
+                  {errors.email}
+                </p>
               ) : null}
             </div>
             <div className="flex flex-col gap-2">
@@ -94,9 +99,12 @@ export function LoginForm() {
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 aria-invalid={Boolean(errors.password)}
+                aria-describedby={errors.password ? "password-error" : undefined}
               />
               {errors.password ? (
-                <p className="text-sm text-destructive">{errors.password}</p>
+                <p className="text-sm text-destructive" id="password-error">
+                  {errors.password}
+                </p>
               ) : null}
             </div>
             <Button type="submit" disabled={isSubmitting} className="mt-2">
