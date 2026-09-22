@@ -13,14 +13,14 @@ Copie estes cartões para o quadro junto ao backlog de MVP em [TRELLO_BACKLOG_MV
 ### [Infra] Validar CI no primeiro PR
 
 - Escopo: confirmar o workflow `Qualidade` no GitHub Actions.
-- Aceite: lint, tipos e build executam em um PR para `homolog`.
+- Aceite: lint, tipos e build executam em um PR para `hml`.
 - Dependência: primeiro push do workflow para o GitHub.
 
 ### [Infra] Proteger branches e configurar Vercel
 
-- Escopo: aplicar o ruleset de `main` e `homolog`; conectar a Vercel com a raiz do repositório como Root Directory.
+- Escopo: aplicar o ruleset de `main` e `hml`; conectar a Vercel com a raiz do repositório como Root Directory.
 - Aceite: push direto é recusado; PR possui check obrigatório; `main` publica produção e PR possui preview.
-- Responsável: Pedro (permissões administrativas necessárias).
+- Pré-requisito: permissões administrativas necessárias.
 
 ## Lista: Design system
 
@@ -73,6 +73,6 @@ Um cartão só pode ir para concluído quando:
 
 - critérios de aceite e regras de negócio foram atendidos;
 - há PR pequeno, review e CI verde;
-- há evidência no preview/homolog;
+- há evidência no preview/hml;
 - estados de loading, vazio, erro e responsividade foram considerados quando aplicáveis;
 - o cartão e o PR estão vinculados.

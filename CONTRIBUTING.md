@@ -2,13 +2,13 @@
 
 ## Fluxo obrigatório
 
-1. Atualize a sua `homolog`: `git switch homolog` e `git pull origin homolog`.
+1. Atualize a sua `hml`: `git switch hml` e `git pull origin hml`.
 2. Crie uma branch curta a partir dela: `git switch -c feat/nome-da-entrega`.
-3. Faça commits pequenos no padrão Conventional Commits, por exemplo `feat: adiciona card de produto`.
-4. Abra um PR para `homolog`, vinculando a issue/cartão do Trello e preenchendo o template do PR.
-5. Após revisão, CI verde e validação de QA em homolog, Pedro promove `homolog` para `main` por PR.
+3. Faça commits pequenos no padrão Conventional Commits, em inglês, por exemplo `feat: add product card`.
+4. Abra um PR para `hml`, vinculando a issue/cartão do Trello e preenchendo o template do PR.
+5. Após revisão, CI verde e validação de QA em `hml`, promova `hml` para `main` por PR.
 
-Não faça push direto em `main` ou `homolog`, não force-push em branches compartilhadas e não inclua `.env` ou chaves no Git.
+Não faça push direto em `main` ou `hml`, não force-push em branches compartilhadas e não inclua `.env` ou chaves no Git.
 
 ## Antes de abrir o PR
 
