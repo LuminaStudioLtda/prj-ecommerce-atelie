@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { Heart, Search, ShoppingBag, User } from "lucide-react";
+import { useSessionStore } from "@/store/use-session-store";
 
 const NAV_LINKS = [
   { label: "Início", href: "/inicio" },
@@ -11,6 +14,9 @@ const NAV_LINKS = [
 ];
 
 export function SiteHeader() {
+  const isAuthenticated = useSessionStore((state) => state.isAuthenticated);
+  const profileHref = isAuthenticated ? "/home" : "/perfil";
+
   return (
     <header className="w-full">
       <div className="bg-secondary px-4 py-2 text-center text-xs font-medium tracking-wide text-secondary-foreground">
@@ -39,9 +45,9 @@ export function SiteHeader() {
             </span>
           </Link>
           <Link
-            href="/perfil"
+            href={profileHref}
             className="flex size-8 items-center justify-center rounded-full bg-primary text-primary-foreground"
-            aria-label="Perfil"
+            aria-label={isAuthenticated ? "Minha conta" : "Perfil"}
           >
             <User className="size-4" aria-hidden="true" />
           </Link>
