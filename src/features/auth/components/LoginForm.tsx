@@ -14,27 +14,21 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { useSessionStore } from "@/store/use-session-store";
+import { mockAuthenticate, validateEmail, validatePassword } from "@/features/auth/services/auth-service";
 
 type FormErrors = Partial<Record<"email" | "password", string>>;
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const MIN_PASSWORD_LENGTH = 6;
-const MOCK_SUBMIT_DELAY_MS = 800;
-
 function validate(email: string, password: string): FormErrors {
   const errors: FormErrors = {};
-  const trimmedEmail = email.trim();
 
-  if (!trimmedEmail) {
-    errors.email = "Informe seu email.";
-  } else if (!EMAIL_REGEX.test(trimmedEmail)) {
-    errors.email = "Informe um email válido.";
+  const emailError = validateEmail(email);
+  if (emailError) {
+    errors.email = emailError;
   }
 
-  if (!password) {
-    errors.password = "Informe sua senha.";
-  } else if (password.length < MIN_PASSWORD_LENGTH) {
-    errors.password = `A senha deve ter pelo menos ${MIN_PASSWORD_LENGTH} caracteres.`;
+  const passwordError = validatePassword(password);
+  if (passwordError) {
+    errors.password = passwordError;
   }
 
   return errors;
@@ -59,7 +53,7 @@ export function LoginForm() {
     }
 
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, MOCK_SUBMIT_DELAY_MS));
+    await mockAuthenticate();
     login();
     router.push("/home");
   }
