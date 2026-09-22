@@ -13,11 +13,11 @@ const NAV_LINKS = [
 export function SiteHeader() {
   return (
     <header className="w-full">
-      <div className="bg-primary/10 px-4 py-2 text-center text-xs font-medium tracking-wide text-primary">
+      <div className="bg-secondary px-4 py-2 text-center text-xs font-medium tracking-wide text-secondary-foreground">
         FRETE GRÁTIS EM PEDIDOS ACIMA DE R$ 350 • PEÇAS FEITAS À MÃO SOB DEMANDA
       </div>
       <div className="flex items-center justify-between gap-4 border-b border-border bg-background px-6 py-4">
-        <Link href="/inicio" className="font-serif text-2xl italic text-foreground">
+        <Link href="/inicio" className="font-serif text-2xl italic text-primary">
           Ateliê
         </Link>
         <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
