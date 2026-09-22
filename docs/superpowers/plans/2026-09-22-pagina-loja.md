@@ -901,6 +901,11 @@ export function LojaCatalog() {
     updateFilters(() => DEFAULT_FILTERS);
   }
 
+  function changeSort(next: SortOption) {
+    setSort(next);
+    setVisibleCount(PRODUCTS_PER_PAGE);
+  }
+
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 p-6">
       <div className="flex flex-col gap-2">
@@ -921,7 +926,7 @@ export function LojaCatalog() {
         </p>
         <select
           value={sort}
-          onChange={(event) => setSort(event.target.value as SortOption)}
+          onChange={(event) => changeSort(event.target.value as SortOption)}
           className="rounded border border-input bg-transparent px-2 py-1 text-sm"
           aria-label="Ordenar produtos"
         >
