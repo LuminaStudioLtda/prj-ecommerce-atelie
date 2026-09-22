@@ -24,16 +24,16 @@ export function SiteHeader() {
           ))}
         </nav>
         <div className="flex items-center gap-4">
-          <Search className="size-5 text-foreground" aria-label="Buscar" />
-          <Heart className="size-5 text-foreground" aria-label="Favoritos" />
+          <Search className="size-5 text-foreground" role="img" aria-label="Buscar" />
+          <Heart className="size-5 text-foreground" role="img" aria-label="Favoritos" />
           <div className="relative">
-            <ShoppingBag className="size-5 text-foreground" aria-label="Carrinho" />
+            <ShoppingBag className="size-5 text-foreground" role="img" aria-label="Carrinho" />
             <span className="absolute -top-2 -right-2 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground">
               0
             </span>
           </div>
           <div className="flex size-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
-            <User className="size-4" aria-label="Conta" />
+            <User className="size-4" role="img" aria-label="Conta" />
           </div>
         </div>
       </div>
