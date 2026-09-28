@@ -73,11 +73,9 @@ Antes de abrir PR, execute também `pnpm build`. Não contorne hooks nem edite `
 
 ## Regras de negócio
 
-Fonte de verdade esperada:
+Fonte de verdade: `Documento de Especificação e Regras de Negócio - Ateliê de Crochê.docx` (BRD), extraído em 28/09/2026 para [docs/TRILHAS_DESENVOLVIMENTO.md](docs/TRILHAS_DESENVOLVIMENTO.md).
 
-`C:\Users\sanso\Downloads\Documento_de_Especificação_e_Regras_de_Negócio_-_Ateliê_de_Crochê.pdf`
-
-O PDF não estava disponível nesse caminho durante a reorganização. As regras de ficha técnica, precificação, estoque, produção, pedidos, pagamento, frete e cancelamento estão **pendentes de extração e validação**. Não as suponha a partir de protótipos, seeds ou documentos de design. Atualize esta seção assim que o PDF estiver disponível e mantenha esse caminho como referência original.
+As regras de ficha técnica, precificação, estoque, produção, pedidos e frete já estão extraídas e organizadas por trilha de desenvolvimento no arquivo acima. Política de cancelamento/troca, gateway de pagamento/antifraude e regiões de frete atendidas continuam **pendentes de decisão do negócio** — não as suponha a partir de protótipos, seeds ou documentos de design.
 
 ## Restrições importantes
 
