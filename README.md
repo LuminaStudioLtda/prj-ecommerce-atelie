@@ -11,7 +11,7 @@ inventory, production, and order operations.
 - TypeScript
 - Tailwind CSS and shadcn/ui
 - Zustand
-- MySQL and Docker
+- PostgreSQL, Prisma ORM and Docker
 
 Use pnpm exclusively. npm and Yarn are not supported.
 
@@ -23,11 +23,19 @@ Use pnpm exclusively. npm and Yarn are not supported.
 ## Getting started
 
 ```bash
+copy .env.example .env
 pnpm install
+pnpm db:up
+pnpm db:migrate:dev
 pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
+
+Copy `.env.example` to `.env`; its PostgreSQL password is for local development
+only. Start the local database with `pnpm db:up`, then apply the initial schema
+with `pnpm db:migrate:dev`. Set `SESSION_SECRET` to a cryptographically random
+value of at least 32 bytes. Generate the Prisma client with `pnpm db:generate`.
 
 ## Quality checks
 
