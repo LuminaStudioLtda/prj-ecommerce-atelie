@@ -26,7 +26,7 @@ type ItemDeNavegacao = {
 const ITENS: ItemDeNavegacao[] = [
   { rotulo: "Dashboard Geral", icone: LayoutDashboardIcon },
   { rotulo: "Gestão de Insumos", icone: Package2Icon, href: "/admin/insumos" },
-  { rotulo: "Receitas & Produtos", icone: BookOpenIcon },
+  { rotulo: "Receitas & Produtos", icone: BookOpenIcon, href: "/admin/receitas" },
   { rotulo: "Motor de Precificação", icone: CalculatorIcon },
   { rotulo: "Fila de Produção", icone: TimerIcon },
   { rotulo: "Catálogo & Vitrine", icone: StoreIcon },

@@ -12,9 +12,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  InsumoFormField,
+  FormField,
   ariaDoCampo,
-} from "@/features/insumos/components/InsumoFormField";
+} from "@/components/FormField";
 import { useInsumoForm } from "@/features/insumos/hooks/use-insumo-form";
 import {
   ROTULO_CUSTO,
@@ -75,7 +75,7 @@ export function InsumoForm({ insumo, onSubmit, onCancel }: InsumoFormProps) {
       </header>
 
       <div className="grid grid-cols-1 gap-5 @xl:grid-cols-2 @3xl:grid-cols-6">
-        <InsumoFormField
+        <FormField
           id={id("categoria")}
           label="Tipo de Insumo"
           obrigatorio
@@ -98,9 +98,9 @@ export function InsumoForm({ insumo, onSubmit, onCancel }: InsumoFormProps) {
               ))}
             </SelectContent>
           </Select>
-        </InsumoFormField>
+        </FormField>
 
-        <InsumoFormField
+        <FormField
           id={id("sku")}
           label="SKU / Código"
           obrigatorio
@@ -115,9 +115,9 @@ export function InsumoForm({ insumo, onSubmit, onCancel }: InsumoFormProps) {
             className={`${CAMPO} font-mono`}
             {...ariaDoCampo(id("sku"), erros.sku)}
           />
-        </InsumoFormField>
+        </FormField>
 
-        <InsumoFormField
+        <FormField
           id={id("nome")}
           label="Nome Comercial"
           obrigatorio
@@ -132,9 +132,9 @@ export function InsumoForm({ insumo, onSubmit, onCancel }: InsumoFormProps) {
             className={CAMPO}
             {...ariaDoCampo(id("nome"), erros.nomeComercial)}
           />
-        </InsumoFormField>
+        </FormField>
 
-        <InsumoFormField id={id("marca")} label="Marca" className="@3xl:col-span-2">
+        <FormField id={id("marca")} label="Marca" className="@3xl:col-span-2">
           <Input
             id={id("marca")}
             value={valores.marca}
@@ -142,9 +142,9 @@ export function InsumoForm({ insumo, onSubmit, onCancel }: InsumoFormProps) {
             placeholder="Ex: Círculo Charme"
             className={CAMPO}
           />
-        </InsumoFormField>
+        </FormField>
 
-        <InsumoFormField id={id("cor")} label="Cor / Tonalidade" className="@3xl:col-span-2">
+        <FormField id={id("cor")} label="Cor / Tonalidade" className="@3xl:col-span-2">
           <Input
             id={id("cor")}
             value={valores.cor}
@@ -152,9 +152,9 @@ export function InsumoForm({ insumo, onSubmit, onCancel }: InsumoFormProps) {
             placeholder="Ex: Terracota Argila (7625)"
             className={CAMPO}
           />
-        </InsumoFormField>
+        </FormField>
 
-        <InsumoFormField
+        <FormField
           id={id("lote")}
           label="Lote / Tintura"
           obrigatorio
@@ -169,9 +169,9 @@ export function InsumoForm({ insumo, onSubmit, onCancel }: InsumoFormProps) {
             className={`${CAMPO} font-mono`}
             {...ariaDoCampo(id("lote"), erros.lote)}
           />
-        </InsumoFormField>
+        </FormField>
 
-        <InsumoFormField
+        <FormField
           id={id("unidade")}
           label="Unidade"
           obrigatorio
@@ -199,9 +199,9 @@ export function InsumoForm({ insumo, onSubmit, onCancel }: InsumoFormProps) {
               ))}
             </SelectContent>
           </Select>
-        </InsumoFormField>
+        </FormField>
 
-        <InsumoFormField
+        <FormField
           id={id("peso")}
           label="Peso do Novelo / Cone"
           obrigatorio={pesoObrigatorio(valores.unidade)}
@@ -225,9 +225,9 @@ export function InsumoForm({ insumo, onSubmit, onCancel }: InsumoFormProps) {
               g
             </span>
           </div>
-        </InsumoFormField>
+        </FormField>
 
-        <InsumoFormField
+        <FormField
           id={id("rendimento")}
           label="Rendimento Total"
           obrigatorio={rendimentoObrigatorio(valores.unidade)}
@@ -251,9 +251,9 @@ export function InsumoForm({ insumo, onSubmit, onCancel }: InsumoFormProps) {
               m
             </span>
           </div>
-        </InsumoFormField>
+        </FormField>
 
-        <InsumoFormField
+        <FormField
           id={id("preco")}
           label="Preço de Aquisição"
           obrigatorio
@@ -277,9 +277,9 @@ export function InsumoForm({ insumo, onSubmit, onCancel }: InsumoFormProps) {
               {...ariaDoCampo(id("preco"), erros.precoAquisicao)}
             />
           </div>
-        </InsumoFormField>
+        </FormField>
 
-        <InsumoFormField
+        <FormField
           id={id("custo")}
           label={ROTULO_CUSTO[valores.unidade]}
           dica="Base de amortização das receitas artesanais."
@@ -307,7 +307,7 @@ export function InsumoForm({ insumo, onSubmit, onCancel }: InsumoFormProps) {
               </span>
             )}
           </output>
-        </InsumoFormField>
+        </FormField>
       </div>
 
       {erroEnvio ? (

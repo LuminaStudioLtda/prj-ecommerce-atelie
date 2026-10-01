@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
-type InsumoFormFieldProps = {
+type FormFieldProps = {
   id: string;
   label: string;
   obrigatorio?: boolean;
@@ -12,7 +12,7 @@ type InsumoFormFieldProps = {
   children: ReactNode;
 };
 
-export function InsumoFormField({
+export function FormField({
   id,
   label,
   obrigatorio = false,
@@ -20,7 +20,7 @@ export function InsumoFormField({
   dica,
   className,
   children,
-}: InsumoFormFieldProps) {
+}: FormFieldProps) {
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
       <Label htmlFor={id} className="text-xs font-semibold tracking-wider uppercase">

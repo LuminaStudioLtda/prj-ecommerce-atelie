@@ -5,7 +5,7 @@ import { PackagePlusIcon, SaveIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { InsumoFormField, ariaDoCampo } from "@/features/insumos/components/InsumoFormField";
+import { FormField, ariaDoCampo } from "@/components/FormField";
 import { useAcessorioForm } from "@/features/insumos/hooks/use-acessorio-form";
 import type { AcessorioInput } from "@/features/insumos/types";
 
@@ -44,7 +44,7 @@ export function AcessorioForm({ onSubmit, onCancel }: AcessorioFormProps) {
       </header>
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-        <InsumoFormField
+        <FormField
           id={id("nome")}
           label="Nome"
           obrigatorio
@@ -59,9 +59,9 @@ export function AcessorioForm({ onSubmit, onCancel }: AcessorioFormProps) {
             className={CAMPO}
             {...ariaDoCampo(id("nome"), erros.nome)}
           />
-        </InsumoFormField>
+        </FormField>
 
-        <InsumoFormField
+        <FormField
           id={id("descricao")}
           label="Descrição"
           dica="Aparece resumida no cartão do acessório."
@@ -74,9 +74,9 @@ export function AcessorioForm({ onSubmit, onCancel }: AcessorioFormProps) {
             placeholder="Ex: Gravação a laser com logo, com furos."
             className="min-h-16 resize-none bg-canvas"
           />
-        </InsumoFormField>
+        </FormField>
 
-        <InsumoFormField id={id("tag")} label="Etiqueta" obrigatorio erro={erros.tag}>
+        <FormField id={id("tag")} label="Etiqueta" obrigatorio erro={erros.tag}>
           <Input
             id={id("tag")}
             value={valores.tag}
@@ -85,9 +85,9 @@ export function AcessorioForm({ onSubmit, onCancel }: AcessorioFormProps) {
             className={CAMPO}
             {...ariaDoCampo(id("tag"), erros.tag)}
           />
-        </InsumoFormField>
+        </FormField>
 
-        <InsumoFormField
+        <FormField
           id={id("fornecedor")}
           label="Fornecedor"
           obrigatorio
@@ -101,9 +101,9 @@ export function AcessorioForm({ onSubmit, onCancel }: AcessorioFormProps) {
             className={CAMPO}
             {...ariaDoCampo(id("fornecedor"), erros.fornecedor)}
           />
-        </InsumoFormField>
+        </FormField>
 
-        <InsumoFormField
+        <FormField
           id={id("custo")}
           label="Custo por Peça"
           obrigatorio
@@ -126,9 +126,9 @@ export function AcessorioForm({ onSubmit, onCancel }: AcessorioFormProps) {
               {...ariaDoCampo(id("custo"), erros.custoPorPeca)}
             />
           </div>
-        </InsumoFormField>
+        </FormField>
 
-        <InsumoFormField
+        <FormField
           id={id("estoque")}
           label="Estoque Atual"
           obrigatorio
@@ -151,7 +151,7 @@ export function AcessorioForm({ onSubmit, onCancel }: AcessorioFormProps) {
               un
             </span>
           </div>
-        </InsumoFormField>
+        </FormField>
       </div>
 
       <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
