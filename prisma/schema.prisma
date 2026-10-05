@@ -1,0 +1,229 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  CLIENT
+  ADMIN
+
+  @@map("user_role")
+}
+
+enum MaterialUnit {
+  UNIT
+  GRAM
+  KILOGRAM
+  MILLILITER
+  LITER
+  METER
+  CENTIMETER
+
+  @@map("material_unit")
+}
+
+enum ProductStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  ARCHIVED
+
+  @@map("product_status")
+}
+
+enum SalesMode {
+  READY_TO_SHIP
+  MADE_TO_ORDER
+
+  @@map("sales_mode")
+}
+
+enum OrderStatus {
+  AWAITING_PAYMENT
+  IN_PRODUCTION
+  READY_TO_SHIP
+  SHIPPED
+  COMPLETED
+  CANCELLED
+
+  @@map("order_status")
+}
+
+enum StockMovementReason {
+  PURCHASE
+  ADJUSTMENT
+  PRODUCTION
+  ORDER
+  RETURN
+  LOSS
+
+  @@map("stock_movement_reason")
+}
+
+model User {
+  id             String          @id @default(cuid())
+  name           String          @db.VarChar(160)
+  email          String          @unique @db.VarChar(320)
+  passwordHash   String?         @map("password_hash") @db.VarChar(255)
+  role           UserRole        @default(CLIENT)
+  orders         Order[]
+  stockMovements StockMovement[]
+  createdAt      DateTime        @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime        @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@map("users")
+}
+
+model Material {
+  id             String          @id @default(cuid())
+  name           String          @db.VarChar(160)
+  kind           String          @db.VarChar(80)
+  unit           MaterialUnit
+  reorderPoint   Decimal         @default(0) @map("reorder_point") @db.Decimal(12, 3)
+  lots           MaterialLot[]
+  recipeItems    RecipeItem[]
+  stockMovements StockMovement[]
+  createdAt      DateTime        @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime        @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@index([name])
+  @@map("materials")
+}
+
+model MaterialLot {
+  id             String          @id @default(cuid())
+  materialId     String          @map("material_id")
+  material       Material        @relation(fields: [materialId], references: [id], onDelete: Restrict)
+  reference      String?         @db.VarChar(120)
+  unitCost       Decimal         @map("unit_cost") @db.Decimal(12, 4)
+  quantityOnHand Decimal         @default(0) @map("quantity_on_hand") @db.Decimal(12, 3)
+  receivedAt     DateTime        @default(now()) @map("received_at") @db.Timestamptz(3)
+  stockMovements StockMovement[]
+
+  @@index([materialId, receivedAt])
+  @@map("material_lots")
+}
+
+model Recipe {
+  id               String       @id @default(cuid())
+  productId        String       @unique @map("product_id")
+  product          Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+  estimatedMinutes Int          @map("estimated_minutes")
+  items            RecipeItem[]
+  createdAt        DateTime     @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt        DateTime     @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@map("recipes")
+}
+
+model RecipeItem {
+  id         String   @id @default(cuid())
+  recipeId   String   @map("recipe_id")
+  recipe     Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  materialId String   @map("material_id")
+  material   Material @relation(fields: [materialId], references: [id], onDelete: Restrict)
+  quantity   Decimal  @db.Decimal(12, 3)
+
+  @@unique([recipeId, materialId])
+  @@map("recipe_items")
+}
+
+model Product {
+  id              String          @id @default(cuid())
+  categoryId      String?         @map("category_id")
+  category        Category?       @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  name            String          @db.VarChar(180)
+  slug            String          @unique @db.VarChar(200)
+  description     String          @db.Text
+  status          ProductStatus   @default(DRAFT)
+  salesModes      SalesMode[]     @map("sales_modes")
+  price           Decimal         @db.Decimal(12, 2)
+  readyStock      Int             @default(0) @map("ready_stock")
+  madeToOrderDays Int?            @map("made_to_order_days")
+  recipe          Recipe?
+  orderItems      OrderItem[]
+  stockMovements  StockMovement[]
+  createdAt       DateTime        @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt       DateTime        @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@index([categoryId, status])
+  @@map("products")
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String    @unique @db.VarChar(120)
+  slug      String    @unique @db.VarChar(160)
+  products  Product[]
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@map("categories")
+}
+
+model Order {
+  id             String          @id @default(cuid())
+  userId         String?         @map("user_id")
+  user           User?           @relation(fields: [userId], references: [id], onDelete: SetNull)
+  customerName   String          @map("customer_name") @db.VarChar(160)
+  customerEmail  String          @map("customer_email") @db.VarChar(320)
+  status         OrderStatus     @default(AWAITING_PAYMENT)
+  total          Decimal         @db.Decimal(12, 2)
+  items          OrderItem[]
+  stockMovements StockMovement[]
+  createdAt      DateTime        @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime        @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@index([userId, createdAt])
+  @@index([status, createdAt])
+  @@map("orders")
+}
+
+model OrderItem {
+  id          String   @id @default(cuid())
+  orderId     String   @map("order_id")
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId   String?  @map("product_id")
+  product     Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productName String   @map("product_name") @db.VarChar(180)
+  quantity    Int
+  unitPrice   Decimal  @map("unit_price") @db.Decimal(12, 2)
+
+  @@map("order_items")
+}
+
+model StockMovement {
+  id             String              @id @default(cuid())
+  materialId     String?             @map("material_id")
+  material       Material?           @relation(fields: [materialId], references: [id], onDelete: Restrict)
+  materialLotId  String?             @map("material_lot_id")
+  materialLot    MaterialLot?        @relation(fields: [materialLotId], references: [id], onDelete: Restrict)
+  productId      String?             @map("product_id")
+  product        Product?            @relation(fields: [productId], references: [id], onDelete: Restrict)
+  orderId        String?             @map("order_id")
+  order          Order?              @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  actorId        String?             @map("actor_id")
+  actor          User?               @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  reason         StockMovementReason
+  origin         String              @db.VarChar(160)
+  quantityDelta  Decimal             @map("quantity_delta") @db.Decimal(12, 3)
+  resultingStock Decimal             @map("resulting_stock") @db.Decimal(12, 3)
+  createdAt      DateTime            @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@index([materialId, createdAt])
+  @@index([productId, createdAt])
+  @@map("stock_movements")
+}
+
+model PricingSettings {
+  id                   String   @id @default("default") @db.VarChar(32)
+  hourlyRate           Decimal  @map("hourly_rate") @db.Decimal(12, 2)
+  lossRate             Decimal  @map("loss_rate") @db.Decimal(7, 4)
+  desiredMarginPercent Decimal  @map("desired_margin_percent") @db.Decimal(7, 4)
+  updatedAt            DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@map("pricing_settings")
+}
