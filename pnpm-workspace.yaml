@@ -1,4 +1,6 @@
 allowBuilds:
+  '@prisma/engines': true
+  prisma: true
   unrs-resolver: false
 minimumReleaseAgeExclude:
   - cn@0.3.2

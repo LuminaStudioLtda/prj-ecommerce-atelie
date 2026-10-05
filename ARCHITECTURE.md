@@ -17,7 +17,7 @@ src/
   features/     # Domínios de negócio e seus casos de uso.
   components/   # UI reutilizada por duas ou mais features; shadcn em components/ui.
   hooks/        # Hooks reutilizados por duas ou mais features.
-  lib/          # Clientes de API/MySQL e helpers gerais sem domínio específico.
+  lib/          # Clientes de infraestrutura PostgreSQL/Prisma e helpers gerais.
   store/        # Stores Zustand compartilhadas, uma por domínio.
 ```
 
@@ -26,7 +26,7 @@ src/
 - Uma feature fica em `src/features/<nome-em-kebab-case>/` e pode ter `components/`, `hooks/`, `services/` e `types.ts` próprios.
 - Código utilizado apenas por uma feature permanece dentro dela. Código utilizado por duas ou mais sobe para `components/`, `hooks/`, `lib/` ou `store/`.
 - `components/` contém primitives e composições de UI sem regra de domínio. Os componentes shadcn/ui ficam obrigatoriamente em `components/ui/`.
-- `lib/` concentra clientes de infraestrutura e helpers gerais. Acesso ao MySQL só pode ocorrer por serviços de uma feature, usando um cliente definido em `lib/`.
+- `lib/` concentra o cliente PostgreSQL/Prisma e helpers gerais. Features acessam dados persistidos somente por seus próprios services; esses services usam `lib/db.ts` e `lib/with-database-role.ts`.
 - `store/` contém apenas estado global ou compartilhado entre features. Nomeie cada arquivo como `use-<dominio>-store.ts`. Estado local de uma única feature deve permanecer nela.
 - Não crie `shared/`, `entities/`, `widgets/` ou uma pasta genérica de tipos.
 
@@ -51,7 +51,7 @@ Zustand é a solução de estado global. Crie store apenas para estado que atrav
 - TypeScript estrito
 - Tailwind CSS e shadcn/ui
 - Zustand
-- MySQL e Docker para persistência e ambiente local quando o backend for introduzido
+- PostgreSQL, Prisma ORM e Docker para persistência
 
 ## Comandos
 
@@ -80,7 +80,8 @@ As regras de ficha técnica, precificação, estoque, produção, pedidos e fret
 ## Restrições importantes
 
 - Não implemente lógica de negócio em componentes de UI, layouts ou páginas.
-- Não acesse MySQL diretamente fora de services da feature responsável.
+- Não acesse PostgreSQL/Prisma diretamente fora de services da feature responsável.
+- Consultas a dados protegidos por Row Level Security devem executar em `withDatabaseRole`, dentro da transação, com o papel obtido da sessão validada.
 - Não use npm ou yarn.
 - Não crie dependências circulares entre features.
 - Não suba segredos, arquivos `.env` ou dados pessoais para o Git.

@@ -16,22 +16,24 @@ Ordem sugerida de arranque: **Trilha 0 → (1, 2 em paralelo) → 3 → (4, 6 em
 
 ---
 
-## Trilha 0 — Fundação (pré-requisito de todas)
+## Trilha 0 — Fundação (pré-requisito de todas) — Pedro Henrique Sanson
 
 **Depende de:** nada. **Feature(s):** `lib/`, `store/`, infraestrutura geral. **Componentes de UI:** nenhum (trabalho de infra/backend).
 
 ### Funcionalidades
 
-- [ ] Modelar entidades e relações centrais: usuário/papel, insumo, lote, ficha técnica (BOM) e item de BOM, produto, categoria, pedido, item de pedido e movimento de estoque.
-- [ ] Configurar cliente MySQL em `lib/` (ex.: `lib/db.ts`) e definir como as features acessam dados (services por feature, nunca acesso direto fora deles).
-- [ ] Implementar RBAC base: papéis `Visitante Anônimo`, `Cliente Autenticado`, `Administrador/Artesã` (seção 1.3 do BRD).
-- [ ] Aplicar Row Level Security no banco para tabelas de insumos e margens: apenas `ADMIN` acessa ou altera (seção 2.2).
-- [ ] Isolar rotas administrativas sob prefixo `/admin` (ou `/dashboard`) com guarda de rota real no front-end, validando sessão e `role` antes de renderizar.
+- [x] Modelar entidades e relações centrais em `prisma/schema.prisma`: usuário/papel, insumo, lote, ficha técnica (BOM) e item de BOM, produto, categoria, pedido, item de pedido e movimento de estoque.
+- [x] Configurar cliente Prisma/PostgreSQL em `src/lib/db.ts` e definir acesso por services de feature, sem query nas páginas.
+- [x] Implementar RBAC base: papéis `Visitante Anônimo`, `Cliente Autenticado`, `Administrador/Artesã` (seção 1.3 do BRD).
+- [x] Implementar Row Level Security no PostgreSQL para tabelas de insumos, lotes, BOM e margens: políticas versionadas na migration inicial `prisma/migrations/20261001000000_initial/migration.sql` (seção 2.2; aplicar ao banco local com `pnpm db:migrate:dev`).
+- [x] Isolar rotas administrativas sob prefixo `/admin` com guarda server-side, validando assinatura/expiração da sessão e `role` antes de renderizar.
 
 ### Critérios de aceite
 
 - Toda feature nova em `src/features/*` acessa dado só via seu próprio `service`; nenhuma página faz fetch/query direta.
 - Rota sob `/admin` sem sessão de `ADMIN` redireciona ou bloqueia — testável manualmente e com teste automatizado.
+
+**Status da entrega:** implementação da Trilha 0 concluída. O banco local recebe o schema e as políticas RLS ao executar `pnpm db:migrate:dev`.
 
 ---
 
