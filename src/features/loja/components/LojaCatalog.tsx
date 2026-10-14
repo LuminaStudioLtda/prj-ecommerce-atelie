@@ -1,9 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
+import { ChevronDown } from "lucide-react";
 import { MAX_PRICE, MIN_PRICE, PRODUCTS_PER_PAGE } from "@/features/loja/constants";
 import {
   filterProducts,
+  searchProducts,
   sortProducts,
   CATEGORY_COUNTS,
   MATERIAL_COUNTS,
@@ -18,8 +21,13 @@ import type {
   SortOption,
 } from "@/features/loja/types";
 import { AppliedFilters } from "@/features/loja/components/AppliedFilters";
+import { CatalogPagination } from "@/features/loja/components/CatalogPagination";
 import { FilterSidebar } from "@/features/loja/components/FilterSidebar";
 import { ProductCard } from "@/features/loja/components/ProductCard";
+
+type LojaCatalogProps = {
+  query: string;
+};
 
 const DEFAULT_FILTERS: ProductFilters = {
   categories: [],
@@ -30,14 +38,14 @@ const DEFAULT_FILTERS: ProductFilters = {
   maxPrice: MAX_PRICE,
 };
 
-export function LojaCatalog() {
+export function LojaCatalog({ query }: LojaCatalogProps) {
   const [filters, setFilters] = useState<ProductFilters>(DEFAULT_FILTERS);
   const [sort, setSort] = useState<SortOption>("mais-recentes");
   const [visibleCount, setVisibleCount] = useState(PRODUCTS_PER_PAGE);
 
   const filteredProducts = useMemo(
-    () => sortProducts(filterProducts(PRODUCTS, filters), sort),
-    [filters, sort],
+    () => sortProducts(filterProducts(searchProducts(PRODUCTS, query), filters), sort),
+    [query, filters, sort],
   );
 
   const visibleProducts = filteredProducts.slice(0, visibleCount);
@@ -91,37 +99,79 @@ export function LojaCatalog() {
     setVisibleCount(PRODUCTS_PER_PAGE);
   }
 
+  function showPage(page: number) {
+    setVisibleCount(Math.max(1, page) * PRODUCTS_PER_PAGE);
+  }
+
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 p-6">
-      <div className="flex flex-col gap-2">
-        <p className="text-xs font-medium tracking-wide text-secondary-foreground uppercase">
-          Coleção Permanente & Lotes Sazonais
-        </p>
-        <h1 className="font-serif text-3xl text-foreground">Nossas Criações</h1>
-        <p className="max-w-2xl text-sm text-muted-foreground">
-          Cada laçada carrega tempo, paciência e a robustez das fibras naturais selecionadas. Peças
-          concebidas individualmente por nossa artesã, unindo a serenidade do linho à maciez do
-          algodão puro.
-        </p>
-      </div>
+    <>
+      <section className="bg-surface-container-low">
+        <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-6 pt-8 pb-10 md:px-12">
+          <nav aria-label="Trilha de navegação" className="text-[10px] text-muted-foreground">
+            <ol className="flex items-center gap-1.5">
+              <li>
+                <Link href="/inicio" className="hover:text-primary">
+                  Início
+                </Link>
+              </li>
+              <li aria-hidden="true">/</li>
+              <li aria-current="page" className="font-medium text-foreground">
+                Loja &amp; Catálogo
+              </li>
+            </ol>
+          </nav>
 
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-sm text-muted-foreground">
-          Exibindo {visibleProducts.length} de {filteredProducts.length} peças artesanais
-        </p>
-        <select
-          value={sort}
-          onChange={(event) => changeSort(event.target.value as SortOption)}
-          className="rounded border border-input bg-transparent px-2 py-1 text-sm"
-          aria-label="Ordenar produtos"
-        >
-          <option value="mais-recentes">Ordenar: Mais Recentes</option>
-          <option value="menor-preco">Ordenar: Menor Preço</option>
-          <option value="maior-preco">Ordenar: Maior Preço</option>
-        </select>
-      </div>
+          <div className="flex flex-col gap-3">
+            <p className="text-[10px] tracking-wider text-muted-foreground uppercase">
+              Coleção Permanente &amp; Lotes Sazonais
+            </p>
+            <h1 className="font-serif text-4xl leading-tight text-foreground md:text-6xl">
+              {query ? `Resultados para “${query}”` : "Nossas Criações"}
+            </h1>
+          </div>
 
-      <div className="flex flex-col gap-6 md:flex-row">
+          <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+            <p className="max-w-xl text-xs leading-relaxed text-muted-foreground">
+              Cada laçada carrega tempo, paciência e a nobreza de fibras naturais selecionadas.
+              Peças concebidas individualmente por mãos artesãs, unindo a serenidade do linho à
+              maciez do algodão puro.
+              {query ? (
+                <>
+                  {" "}
+                  <Link href="/loja" className="text-primary underline-offset-4 hover:underline">
+                    Limpar busca
+                  </Link>
+                </>
+              ) : null}
+            </p>
+            <div className="flex shrink-0 items-stretch gap-3">
+              <p className="flex items-center rounded-sm bg-card px-4 py-3 text-[11px] leading-snug text-foreground">
+                Exibindo {filteredProducts.length}
+                <br className="hidden sm:block" /> peças artesanais
+              </p>
+              <label className="relative flex items-center gap-2 rounded-sm bg-card px-4 py-3 text-[11px] text-muted-foreground">
+                <span className="tracking-wider uppercase">Ordenar:</span>
+                <select
+                  value={sort}
+                  onChange={(event) => changeSort(event.target.value as SortOption)}
+                  aria-label="Ordenar produtos"
+                  className="appearance-none bg-transparent pr-6 text-foreground focus:outline-none"
+                >
+                  <option value="mais-recentes">Mais Recentes</option>
+                  <option value="menor-preco">Menor Preço</option>
+                  <option value="maior-preco">Maior Preço</option>
+                </select>
+                <ChevronDown
+                  className="pointer-events-none absolute right-4 size-3.5 text-muted-foreground"
+                  aria-hidden="true"
+                />
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="mx-auto grid w-full max-w-7xl gap-8 px-6 pt-12 md:px-12 lg:grid-cols-[15rem_1fr]">
         <FilterSidebar
           filters={filters}
           categoryCounts={CATEGORY_COUNTS}
@@ -134,7 +184,7 @@ export function LojaCatalog() {
           onClearAll={clearAllFilters}
         />
 
-        <div className="flex flex-1 flex-col gap-4">
+        <div className="flex min-w-0 flex-col gap-6">
           <AppliedFilters
             filters={filters}
             onRemoveCategory={toggleCategory}
@@ -143,28 +193,27 @@ export function LojaCatalog() {
           />
 
           {visibleProducts.length > 0 ? (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
               {visibleProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
           ) : (
             <p className="text-sm text-muted-foreground">
-              Nenhuma peça encontrada com os filtros selecionados.
+              {query
+                ? `Nenhuma peça encontrada para “${query}”. Tente outro termo ou limpe os filtros.`
+                : "Nenhuma peça encontrada com os filtros selecionados."}
             </p>
           )}
 
-          {visibleCount < filteredProducts.length ? (
-            <button
-              type="button"
-              onClick={() => setVisibleCount((current) => current + PRODUCTS_PER_PAGE)}
-              className="self-center rounded-full border border-primary px-4 py-2 text-sm font-medium text-primary hover:bg-primary hover:text-primary-foreground"
-            >
-              Carregar Mais Peças do Ateliê
-            </button>
-          ) : null}
+          <CatalogPagination
+            visibleCount={visibleCount}
+            totalCount={filteredProducts.length}
+            pageSize={PRODUCTS_PER_PAGE}
+            onShowPage={showPage}
+          />
         </div>
       </div>
-    </div>
+    </>
   );
 }

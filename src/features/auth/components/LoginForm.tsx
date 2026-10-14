@@ -14,7 +14,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { useSessionStore } from "@/store/use-session-store";
-import { mockAuthenticate, validateEmail, validatePassword } from "@/features/auth/services/auth-service";
+import { mockAuthenticate, nameFromEmail, validateEmail, validatePassword } from "@/features/auth/services/auth-service";
 
 type FormErrors = Partial<Record<"email" | "password", string>>;
 
@@ -54,7 +54,7 @@ export function LoginForm() {
 
     setIsSubmitting(true);
     await mockAuthenticate();
-    login();
+    login({ name: nameFromEmail(email), email: email.trim().toLowerCase() });
     router.push("/home");
   }
 

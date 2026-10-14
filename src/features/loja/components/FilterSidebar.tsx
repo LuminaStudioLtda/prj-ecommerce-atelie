@@ -1,6 +1,7 @@
 "use client";
 
-import type { ChangeEvent } from "react";
+import type { ChangeEvent, ReactNode } from "react";
+import { Check, ChevronUp, Leaf } from "lucide-react";
 import {
   CATEGORIES,
   COLOR_TONES,
@@ -29,6 +30,35 @@ type FilterSidebarProps = {
   onClearAll: () => void;
 };
 
+const PRODUCTION_MODES: { value: ProductionModeFilter; label: string; description: string }[] = [
+  { value: "todas", label: "Todas as modalidades", description: "Pronta entrega e sob demanda" },
+  {
+    value: "pronta-entrega",
+    label: "Pronta Entrega Imediata",
+    description: "Peças já confeccionadas",
+  },
+  {
+    value: "sob-demanda",
+    label: "Feito sob Demanda",
+    description: "Confeccionadas após o pedido",
+  },
+];
+
+function FilterSection({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <details open className="group flex flex-col gap-3">
+      <summary className="flex cursor-pointer list-none items-center justify-between text-[11px] font-medium text-foreground [&::-webkit-details-marker]:hidden">
+        {title}
+        <ChevronUp
+          className="size-3.5 text-muted-foreground transition-transform group-not-open:rotate-180"
+          aria-hidden="true"
+        />
+      </summary>
+      <div className="flex flex-col gap-2.5">{children}</div>
+    </details>
+  );
+}
+
 export function FilterSidebar({
   filters,
   categoryCounts,
@@ -41,76 +71,95 @@ export function FilterSidebar({
   onClearAll,
 }: FilterSidebarProps) {
   function handleMinPriceChange(event: ChangeEvent<HTMLInputElement>) {
-    onPriceRangeChange(Number(event.target.value), filters.maxPrice);
+    const value = Number(event.target.value);
+    onPriceRangeChange(Math.min(value, filters.maxPrice), filters.maxPrice);
   }
 
   function handleMaxPriceChange(event: ChangeEvent<HTMLInputElement>) {
-    onPriceRangeChange(filters.minPrice, Number(event.target.value));
+    const value = Number(event.target.value);
+    onPriceRangeChange(filters.minPrice, Math.max(value, filters.minPrice));
   }
 
+  const activeTones = filters.colorTones.length > 0 ? filters.colorTones.join(", ") : "Todos";
+
   return (
-    <aside className="flex w-64 shrink-0 flex-col gap-6 text-sm">
-      <div className="flex items-center justify-between">
-        <h2 className="font-semibold text-foreground">Filtros do Ateliê</h2>
+    <aside className="flex h-fit flex-col gap-6 rounded-sm bg-surface-container-low p-6 text-xs">
+      <div className="flex items-start justify-between gap-3">
+        <h2 className="font-serif text-base leading-tight text-foreground">Filtros do Ateliê</h2>
         <button
           type="button"
           onClick={onClearAll}
-          className="text-xs text-muted-foreground hover:text-primary"
+          className="text-[10px] text-muted-foreground underline underline-offset-2 hover:text-primary"
         >
           Limpar Todos
         </button>
       </div>
 
-      <div className="flex flex-col gap-2">
-        <h3 className="font-medium text-foreground">Categorias de Peças</h3>
+      <FilterSection title="Categorias de Peças">
         {CATEGORIES.map((category) => (
           <label key={category} className="flex items-center gap-2 text-muted-foreground">
             <input
               type="checkbox"
               checked={filters.categories.includes(category)}
               onChange={() => onToggleCategory(category)}
-              className="accent-primary"
+              className="size-3.5 accent-primary"
             />
-            {category} ({categoryCounts[category]})
+            <span className="flex-1">{category}</span>
+            <span className="text-[10px]">{categoryCounts[category]}</span>
           </label>
         ))}
-      </div>
+      </FilterSection>
 
-      <div className="flex flex-col gap-2">
-        <h3 className="font-medium text-foreground">Fibras & Matéria-Prima</h3>
+      <FilterSection title="Fibras & Matéria-Prima">
         {MATERIALS.map((material) => (
           <label key={material} className="flex items-center gap-2 text-muted-foreground">
             <input
               type="checkbox"
               checked={filters.materials.includes(material)}
               onChange={() => onToggleMaterial(material)}
-              className="accent-primary"
+              className="size-3.5 accent-primary"
             />
-            {material} ({materialCounts[material]})
+            <span className="flex-1">{material}</span>
+            <span className="text-[10px]">{materialCounts[material]}</span>
           </label>
         ))}
-      </div>
+      </FilterSection>
 
-      <div className="flex flex-col gap-2">
-        <h3 className="font-medium text-foreground">Paleta Botânica & Mineral</h3>
+      <FilterSection title="Paleta Botânica & Mineral">
         <div className="flex gap-2">
-          {COLOR_TONES.map((tone) => (
-            <button
-              key={tone}
-              type="button"
-              onClick={() => onToggleColorTone(tone)}
-              aria-label={tone}
-              aria-pressed={filters.colorTones.includes(tone)}
-              className={`size-6 rounded-full ${COLOR_TONE_SWATCH_CLASS[tone]} ${
-                filters.colorTones.includes(tone) ? "ring-primary ring-2 ring-offset-2" : ""
-              }`}
-            />
-          ))}
+          {COLOR_TONES.map((tone) => {
+            const isSelected = filters.colorTones.includes(tone);
+            return (
+              <button
+                key={tone}
+                type="button"
+                onClick={() => onToggleColorTone(tone)}
+                aria-label={tone}
+                aria-pressed={isSelected}
+                className={`flex size-8 items-center justify-center rounded-md ${COLOR_TONE_SWATCH_CLASS[tone]} ${
+                  isSelected ? "ring-2 ring-primary ring-offset-2 ring-offset-surface-container-low" : ""
+                }`}
+              >
+                {isSelected ? <Check className="size-3.5 text-primary-foreground" aria-hidden="true" /> : null}
+              </button>
+            );
+          })}
         </div>
-      </div>
+        <div className="flex justify-between gap-2 text-[9px] text-muted-foreground">
+          <span>
+            Tom Ativo:
+            <br />
+            {activeTones}
+          </span>
+          <span className="text-right">
+            Tinta
+            <br />
+            Vegetal
+          </span>
+        </div>
+      </FilterSection>
 
-      <div className="flex flex-col gap-2">
-        <h3 className="font-medium text-foreground">Investimento (R$)</h3>
+      <FilterSection title="Investimento (R$)">
         <div className="flex items-center gap-2">
           <input
             type="number"
@@ -118,59 +167,59 @@ export function FilterSidebar({
             max={MAX_PRICE}
             value={filters.minPrice}
             onChange={handleMinPriceChange}
-            className="w-20 rounded border border-input bg-transparent px-2 py-1"
+            className="h-7 w-full min-w-0 rounded-sm border border-border bg-card px-2 text-[10px] text-foreground"
             aria-label="Preço mínimo"
           />
-          <span className="text-muted-foreground">até</span>
+          <span className="text-muted-foreground">—</span>
           <input
             type="number"
             min={MIN_PRICE}
             max={MAX_PRICE}
             value={filters.maxPrice}
             onChange={handleMaxPriceChange}
-            className="w-20 rounded border border-input bg-transparent px-2 py-1"
+            className="h-7 w-full min-w-0 rounded-sm border border-border bg-card px-2 text-[10px] text-foreground"
             aria-label="Preço máximo"
           />
         </div>
-      </div>
+        <input
+          type="range"
+          min={MIN_PRICE}
+          max={MAX_PRICE}
+          value={filters.maxPrice}
+          onChange={handleMaxPriceChange}
+          aria-label="Preço máximo"
+          className="w-full accent-primary"
+        />
+        <div className="flex justify-between text-[9px] text-muted-foreground">
+          <span>Essenciais</span>
+          <span>Peças Escultuárias</span>
+        </div>
+      </FilterSection>
 
-      <div className="flex flex-col gap-2">
-        <h3 className="font-medium text-foreground">Modalidade de Produção</h3>
-        <label className="flex items-center gap-2 text-muted-foreground">
-          <input
-            type="radio"
-            name="production-mode"
-            checked={filters.productionMode === "todas"}
-            onChange={() => onProductionModeChange("todas")}
-            className="accent-primary"
-          />
-          Todas as modalidades
-        </label>
-        <label className="flex items-center gap-2 text-muted-foreground">
-          <input
-            type="radio"
-            name="production-mode"
-            checked={filters.productionMode === "pronta-entrega"}
-            onChange={() => onProductionModeChange("pronta-entrega")}
-            className="accent-primary"
-          />
-          Pronta Entrega
-        </label>
-        <label className="flex items-center gap-2 text-muted-foreground">
-          <input
-            type="radio"
-            name="production-mode"
-            checked={filters.productionMode === "sob-demanda"}
-            onChange={() => onProductionModeChange("sob-demanda")}
-            className="accent-primary"
-          />
-          Feito sob Demanda
-        </label>
-      </div>
+      <FilterSection title="Modalidade de Produção">
+        {PRODUCTION_MODES.map(({ value, label, description }) => (
+          <label key={value} className="flex items-start gap-2">
+            <input
+              type="radio"
+              name="production-mode"
+              checked={filters.productionMode === value}
+              onChange={() => onProductionModeChange(value)}
+              className="mt-0.5 size-3.5 accent-primary"
+            />
+            <span className="flex flex-col">
+              <span className="text-foreground">{label}</span>
+              <span className="text-[9px] text-muted-foreground">{description}</span>
+            </span>
+          </label>
+        ))}
+      </FilterSection>
 
-      <div className="rounded-lg bg-muted p-3 text-xs text-muted-foreground">
-        <p className="mb-1 font-medium text-foreground">Produção Responsável</p>
-        <p>Nossas fibras possuem certificação orgânica e rastreamento de origem e razão nacional.</p>
+      <div className="rounded-sm bg-card p-4 text-[10px] leading-relaxed text-muted-foreground">
+        <p className="mb-1 flex items-center gap-1.5 font-medium text-foreground">
+          <Leaf className="size-3.5" aria-hidden="true" />
+          Produção Responsável
+        </p>
+        <p>Nossos fios possuem certificação orgânica e tingimento com folhas e raízes nacionais.</p>
       </div>
     </aside>
   );

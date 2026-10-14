@@ -25,6 +25,12 @@ export function validatePassword(password: string): string | undefined {
   return undefined;
 }
 
+export function nameFromEmail(email: string): string {
+  const localPart = email.trim().split("@")[0] ?? "";
+  const words = localPart.split(/[._-]+/).filter(Boolean);
+  return words.map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+}
+
 export async function mockAuthenticate(): Promise<void> {
   await new Promise((resolve) => setTimeout(resolve, MOCK_AUTH_DELAY_MS));
 }

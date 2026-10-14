@@ -24,10 +24,10 @@ export const COLOR_TONE_SWATCH_CLASS: Record<ProductColorTone, string> = {
 };
 
 export const BADGE_STYLE_CLASS: Record<ProductBadge, string> = {
-  Lançamento: "bg-foreground text-background",
-  "Em Demanda": "bg-secondary text-secondary-foreground",
-  "Edição Limitada": "bg-foreground text-background",
-  "Pronta Entrega": "bg-primary text-primary-foreground",
+  Lançamento: "bg-background text-foreground",
+  "Sob Demanda": "bg-sage/40 text-foreground",
+  "Edição Limitada": "bg-background text-foreground",
+  "Pronta Entrega": "bg-sage/40 text-foreground",
 };
 
 export const MIN_PRICE = 180;

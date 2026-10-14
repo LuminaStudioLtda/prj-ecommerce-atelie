@@ -1,5 +1,15 @@
-import { PlaceholderPage } from "@/components/placeholder-page";
+import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
+import { FavoritesView } from "@/features/favoritos/components/FavoritesView";
 
 export default function FavoritosPage() {
-  return <PlaceholderPage title="Favoritos" />;
+  return (
+    <div className="flex flex-1 flex-col">
+      <SiteHeader />
+      <main className="flex-1">
+        <FavoritesView />
+      </main>
+      <SiteFooter />
+    </div>
+  );
 }

@@ -18,6 +18,12 @@ export const PRODUCTS: Product[] = [
     productionMode: "pronta-entrega",
     badge: "Lançamento",
     fiberDescription: "100% Algodão Cru e Terracota",
+    images: [
+      "/produtos/blusa-trama-suave/1.png",
+      "/produtos/blusa-trama-suave/2.png",
+      "/produtos/blusa-trama-suave/3.png",
+      "/produtos/blusa-trama-suave/4.png",
+    ],
   },
   {
     id: "cardigan-aurora",
@@ -27,7 +33,7 @@ export const PRODUCTS: Product[] = [
     material: "Lã Merino Natural",
     colorTones: ["Sálvia"],
     productionMode: "sob-demanda",
-    badge: "Em Demanda",
+    badge: "Sob Demanda",
     fiberDescription: "100% Lã Merino Rústica",
   },
   {
@@ -70,7 +76,7 @@ export const PRODUCTS: Product[] = [
     material: "Lã Merino Natural",
     colorTones: ["Terracota", "Marrom"],
     productionMode: "sob-demanda",
-    badge: "Em Demanda",
+    badge: "Sob Demanda",
     fiberDescription: "Lã Merino e Ráfia Rústica",
   },
   {
@@ -195,7 +201,7 @@ export const PRODUCTS: Product[] = [
     material: "Linho Puro Brasileiro",
     colorTones: ["Marrom"],
     productionMode: "sob-demanda",
-    badge: "Em Demanda",
+    badge: "Sob Demanda",
     fiberDescription: "Linho Brasileiro Encorpado",
   },
   {
@@ -258,7 +264,7 @@ export const PRODUCTS: Product[] = [
     material: "Lã Merino Natural",
     colorTones: ["Terracota"],
     productionMode: "sob-demanda",
-    badge: "Em Demanda",
+    badge: "Sob Demanda",
     fiberDescription: "Lã Merino e Franjas Artesanais",
   },
 ];
@@ -278,6 +284,44 @@ export const MATERIAL_COUNTS: Record<ProductMaterial, number> = MATERIALS.reduce
   },
   {} as Record<ProductMaterial, number>,
 );
+
+function normalizeText(value: string): string {
+  return value
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase();
+}
+
+export function searchProducts(products: Product[], query: string): Product[] {
+  const terms = normalizeText(query).split(/\s+/).filter(Boolean);
+  if (terms.length === 0) {
+    return products;
+  }
+  return products.filter((product) => {
+    const haystack = normalizeText(
+      [
+        product.name,
+        product.category,
+        product.material,
+        product.fiberDescription,
+        product.badge ?? "",
+        ...product.colorTones,
+      ].join(" "),
+    );
+    return terms.every((term) => haystack.includes(term));
+  });
+}
+
+export function getRecommendedProducts(product: Product, limit: number): Product[] {
+  const candidates = PRODUCTS.filter((item) => item.id !== product.id);
+  const onePerCategory = candidates.filter(
+    (item, index) =>
+      item.category !== product.category &&
+      candidates.findIndex((other) => other.category === item.category) === index,
+  );
+  const remaining = candidates.filter((item) => !onePerCategory.includes(item));
+  return [...onePerCategory, ...remaining].slice(0, limit);
+}
 
 function matchesFilters(product: Product, filters: ProductFilters): boolean {
   if (filters.categories.length > 0 && !filters.categories.includes(product.category)) {

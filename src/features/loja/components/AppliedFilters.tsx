@@ -15,6 +15,11 @@ type AppliedFiltersProps = {
   onRemoveColorTone: (tone: ProductColorTone) => void;
 };
 
+const CHIP_BASE_CLASS =
+  "flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] text-foreground transition-opacity hover:opacity-80";
+const GREEN_CHIP_CLASS = `${CHIP_BASE_CLASS} bg-sage/40`;
+const TONE_CHIP_CLASS = `${CHIP_BASE_CLASS} bg-accent`;
+
 export function AppliedFilters({
   filters,
   onRemoveCategory,
@@ -30,13 +35,16 @@ export function AppliedFilters({
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <span className="text-sm text-muted-foreground">Filtros aplicados:</span>
+      <span className="text-[10px] tracking-wider text-muted-foreground uppercase">
+        Filtros aplicados:
+      </span>
       {filters.categories.map((category) => (
         <button
           key={category}
           type="button"
           onClick={() => onRemoveCategory(category)}
-          className="flex items-center gap-1 rounded-full bg-secondary px-3 py-1 text-xs text-secondary-foreground"
+          aria-label={`Remover filtro ${category}`}
+          className={GREEN_CHIP_CLASS}
         >
           {category}
           <X className="size-3" aria-hidden="true" />
@@ -47,7 +55,8 @@ export function AppliedFilters({
           key={material}
           type="button"
           onClick={() => onRemoveMaterial(material)}
-          className="flex items-center gap-1 rounded-full bg-secondary px-3 py-1 text-xs text-secondary-foreground"
+          aria-label={`Remover filtro ${material}`}
+          className={GREEN_CHIP_CLASS}
         >
           {material}
           <X className="size-3" aria-hidden="true" />
@@ -58,7 +67,8 @@ export function AppliedFilters({
           key={tone}
           type="button"
           onClick={() => onRemoveColorTone(tone)}
-          className="flex items-center gap-1 rounded-full bg-primary/15 px-3 py-1 text-xs text-foreground"
+          aria-label={`Remover filtro tom ${tone}`}
+          className={TONE_CHIP_CLASS}
         >
           Tom: {tone}
           <X className="size-3" aria-hidden="true" />

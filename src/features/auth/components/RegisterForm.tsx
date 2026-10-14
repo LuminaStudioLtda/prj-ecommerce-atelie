@@ -60,7 +60,7 @@ export function RegisterForm() {
 
     setIsSubmitting(true);
     await mockAuthenticate();
-    login();
+    login({ name: name.trim(), email: email.trim().toLowerCase() });
     router.push("/home");
   }
 

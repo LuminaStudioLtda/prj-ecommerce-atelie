@@ -6,14 +6,6 @@ import type {
   HomeValueProposition,
 } from "./types";
 
-export const HEADER_NAV_LINKS = [
-  { label: "Início", href: "/inicio" },
-  { label: "Catálogo", href: "/loja" },
-  { label: "Sob Medida", href: "/sob-medida" },
-  { label: "Sobre o Ateliê", href: "/sobre" },
-  { label: "Contato", href: "/contato" },
-] as const;
-
 export const BADGE_TONE_CLASS: Record<HomeProductTone, string> = {
   primary: "bg-primary text-on-primary",
   secondary: "bg-secondary text-on-secondary",

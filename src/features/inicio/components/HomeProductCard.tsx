@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import { MaterialIcon } from "@/components/MaterialIcon";
 import { BADGE_TONE_CLASS } from "@/features/inicio/constants";
 import { formatPrice, getStarStates } from "@/features/inicio/services/home-service";
 import type { HomeProduct, StarState } from "@/features/inicio/types";
+import { useFavorite } from "@/hooks/use-favorite";
 import { useCartStore } from "@/store/use-cart-store";
 
 type HomeProductCardProps = {
@@ -19,8 +19,8 @@ const STAR_ICON: Record<StarState, string> = {
 };
 
 export function HomeProductCard({ product }: HomeProductCardProps) {
-  const [isFavorited, setIsFavorited] = useState(false);
-  const addItems = useCartStore((state) => state.addItems);
+  const { isFavorited, toggle: toggleFavorite } = useFavorite(product.id);
+  const addItem = useCartStore((state) => state.addItem);
 
   return (
     <div className="group flex flex-col justify-between overflow-hidden rounded-[0.5rem] bg-surface-container-lowest shadow-sm transition-all duration-300 hover:shadow-xl">
@@ -39,7 +39,7 @@ export function HomeProductCard({ product }: HomeProductCardProps) {
         </span>
         <button
           type="button"
-          onClick={() => setIsFavorited((current) => !current)}
+          onClick={toggleFavorite}
           aria-label={isFavorited ? "Remover dos favoritos" : "Favoritar"}
           aria-pressed={isFavorited}
           className="absolute top-space-sm right-space-sm flex size-9 items-center justify-center rounded-[0.75rem] bg-surface/90 text-on-surface shadow-sm transition-colors hover:bg-surface hover:text-primary"
@@ -76,7 +76,7 @@ export function HomeProductCard({ product }: HomeProductCardProps) {
           </div>
           <button
             type="button"
-            onClick={() => addItems(1)}
+            onClick={() => addItem({ productId: product.id, name: product.name, price: product.price, image: product.image }, 1)}
             className="flex items-center gap-1 rounded-[0.25rem] bg-primary px-space-md py-2 text-label-sm font-semibold text-on-primary shadow-sm transition-colors hover:bg-primary-container"
           >
             <MaterialIcon name="add_shopping_cart" className="text-[16px]" />

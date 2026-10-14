@@ -16,7 +16,7 @@ export type ProductionMode = "pronta-entrega" | "sob-demanda";
 
 export type ProductBadge =
   | "Lançamento"
-  | "Em Demanda"
+  | "Sob Demanda"
   | "Edição Limitada"
   | "Pronta Entrega";
 
@@ -30,6 +30,7 @@ export type Product = {
   productionMode: ProductionMode;
   badge?: ProductBadge;
   fiberDescription: string;
+  images?: string[];
 };
 
 export type SortOption = "mais-recentes" | "menor-preco" | "maior-preco";

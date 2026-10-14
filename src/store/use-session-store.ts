@@ -1,11 +1,23 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
+export type UserProfile = {
+  name: string;
+  email: string;
+  phone: string;
+  cep: string;
+  address: string;
+};
+
+const EMPTY_PROFILE: UserProfile = { name: "", email: "", phone: "", cep: "", address: "" };
+
 type SessionState = {
   isAuthenticated: boolean;
   hasHydrated: boolean;
-  login: () => void;
+  profile: UserProfile;
+  login: (identity: Pick<UserProfile, "name" | "email">) => void;
   logout: () => void;
+  updateProfile: (profile: UserProfile) => void;
   setHasHydrated: (value: boolean) => void;
 };
 
@@ -14,13 +26,23 @@ export const useSessionStore = create<SessionState>()(
     (set) => ({
       isAuthenticated: false,
       hasHydrated: false,
-      login: () => set({ isAuthenticated: true }),
+      profile: EMPTY_PROFILE,
+      login: ({ name, email }) =>
+        set((state) => ({
+          isAuthenticated: true,
+          profile:
+            state.profile.email === email
+              ? { ...state.profile, name: name || state.profile.name }
+              : { ...EMPTY_PROFILE, name, email },
+        })),
       logout: () => set({ isAuthenticated: false }),
+      updateProfile: (profile) => set({ profile }),
       setHasHydrated: (value) => set({ hasHydrated: value }),
     }),
     {
       name: "session-store",
-      storage: createJSONStorage(() => sessionStorage),
+      storage: createJSONStorage(() => localStorage),
+      partialize: ({ isAuthenticated, profile }) => ({ isAuthenticated, profile }),
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated(true);
       },
