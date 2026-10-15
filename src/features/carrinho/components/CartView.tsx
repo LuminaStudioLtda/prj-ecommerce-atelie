@@ -1,8 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ImageIcon, Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
+import { CheckCircle2, ImageIcon, Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 import {
   FREE_SHIPPING_THRESHOLD,
   getFreeShippingRemaining,
@@ -19,9 +20,37 @@ export function CartView() {
   const setQuantity = useCartStore((state) => state.setQuantity);
   const removeItem = useCartStore((state) => state.removeItem);
   const clear = useCartStore((state) => state.clear);
+  const [isOrderPlaced, setIsOrderPlaced] = useState(false);
+
+  function handleCheckout() {
+    clear();
+    setIsOrderPlaced(true);
+  }
 
   if (!hydrated) {
     return <div className="mx-auto min-h-96 w-full max-w-7xl px-6 py-10 md:px-12" aria-busy="true" />;
+  }
+
+  if (isOrderPlaced) {
+    return (
+      <div
+        role="status"
+        className="mx-auto flex w-full max-w-7xl flex-col items-center gap-4 px-6 py-24 text-center md:px-12"
+      >
+        <CheckCircle2 className="size-10 text-secondary" aria-hidden="true" />
+        <h1 className="font-serif text-3xl text-foreground">Pedido recebido</h1>
+        <p className="max-w-md text-sm text-muted-foreground">
+          Esta é uma demonstração do fluxo de compra: nenhum pagamento foi processado e nenhum pedido
+          foi gerado.
+        </p>
+        <Link
+          href="/loja"
+          className="rounded-sm bg-primary px-6 py-3 text-xs font-semibold tracking-wider text-primary-foreground uppercase"
+        >
+          Voltar à loja
+        </Link>
+      </div>
+    );
   }
 
   if (items.length === 0) {
@@ -157,13 +186,13 @@ export function CartView() {
           </div>
           <button
             type="button"
-            disabled
-            className="h-11 rounded-sm bg-primary text-xs font-semibold tracking-wider text-primary-foreground uppercase disabled:opacity-50"
+            onClick={handleCheckout}
+            className="h-11 rounded-sm bg-primary text-xs font-semibold tracking-wider text-primary-foreground uppercase transition-transform hover:bg-primary/90 active:scale-[0.98]"
           >
             Finalizar compra
           </button>
           <p className="text-center text-xs text-muted-foreground">
-            O checkout ainda não está disponível.
+            Demonstração: nenhum pagamento é processado.
           </p>
           <Link
             href="/loja"

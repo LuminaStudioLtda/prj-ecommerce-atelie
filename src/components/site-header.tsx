@@ -142,7 +142,7 @@ export function SiteHeader() {
       <div className="border-y border-surface-container-high/60 bg-surface-container-lowest/90 backdrop-blur-md">
         <div className="mx-auto max-w-7xl px-margin">
           <nav aria-label="Principal" className="flex items-center justify-between py-2">
-            <div className="flex items-center gap-space-md">
+            <div className="flex items-center gap-space-md overflow-x-auto">
               {NAV_LINKS.map(({ label, href }) => {
                 const isActive = pathname === href || pathname.startsWith(`${href}/`);
                 return (

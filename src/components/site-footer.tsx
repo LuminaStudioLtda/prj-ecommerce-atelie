@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Camera, Mail, Palette } from "lucide-react";
 import { FooterNewsletterForm } from "@/components/footer-newsletter-form";
+import { SOCIAL_LINKS } from "@/lib/social-links";
 
 const FOOTER_COLUMNS = [
   {
@@ -72,15 +73,27 @@ export function SiteFooter() {
             </p>
             <FooterNewsletterForm />
             <div className="flex items-center gap-3 text-foreground">
-              <a href="#" aria-label="Instagram" className="hover:text-primary">
+              <a
+                href={SOCIAL_LINKS.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="hover:text-primary"
+              >
                 <Camera className="size-4" aria-hidden="true" />
               </a>
-              <a href="#" aria-label="Pinterest" className="hover:text-primary">
+              <a
+                href={SOCIAL_LINKS.pinterest}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Pinterest"
+                className="hover:text-primary"
+              >
                 <Palette className="size-4" aria-hidden="true" />
               </a>
-              <a href="#" aria-label="E-mail" className="hover:text-primary">
+              <Link href="/contato" aria-label="Fale conosco" className="hover:text-primary">
                 <Mail className="size-4" aria-hidden="true" />
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -90,9 +103,9 @@ export function SiteFooter() {
           <ul className="flex flex-wrap gap-5">
             {LEGAL_LINKS.map((label) => (
               <li key={label}>
-                <a href="#" className="hover:text-primary">
+                <Link href="/contato" className="hover:text-primary">
                   {label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>

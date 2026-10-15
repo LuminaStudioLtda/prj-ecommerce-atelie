@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { ImageIcon, Timer, ZoomIn } from "lucide-react";
+import { ImageIcon, Timer, X, ZoomIn } from "lucide-react";
 import type { ProductBadge } from "@/features/loja/types";
 
 type ProductGalleryProps = {
@@ -15,6 +15,21 @@ const PLACEHOLDER_TINT_CLASSES = ["bg-primary/25", "bg-accent", "bg-secondary/30
 
 export function ProductGallery({ productName, images, badge }: ProductGalleryProps) {
   const [selectedImage, setSelectedImage] = useState(0);
+  const [isZoomed, setIsZoomed] = useState(false);
+
+  useEffect(() => {
+    if (!isZoomed) {
+      return;
+    }
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setIsZoomed(false);
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isZoomed]);
+
   const slideCount = images?.length ?? PLACEHOLDER_TINT_CLASSES.length;
   const slides = Array.from({ length: slideCount }, (_, index) => ({
     src: images?.[index],
@@ -67,12 +82,45 @@ export function ProductGallery({ productName, images, badge }: ProductGalleryPro
         ) : null}
         <button
           type="button"
+          onClick={() => setIsZoomed(true)}
           aria-label="Ampliar imagem"
           className="absolute right-3 bottom-3 flex size-9 items-center justify-center rounded-full bg-background text-foreground"
         >
           <ZoomIn className="size-4" aria-hidden="true" />
         </button>
       </div>
+
+      {isZoomed ? (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${productName} — imagem ampliada`}
+          onClick={() => setIsZoomed(false)}
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-foreground/80 p-4"
+        >
+          <button
+            type="button"
+            onClick={() => setIsZoomed(false)}
+            aria-label="Fechar imagem ampliada"
+            className="absolute top-4 right-4 flex size-11 items-center justify-center rounded-full bg-background text-foreground"
+          >
+            <X className="size-5" aria-hidden="true" />
+          </button>
+          <div className="relative aspect-square w-full max-w-3xl overflow-hidden rounded-sm bg-accent">
+            {current.src ? (
+              <Image
+                src={current.src}
+                alt={`${productName} — imagem ${selectedImage + 1} ampliada`}
+                fill
+                sizes="(min-width: 768px) 48rem, 100vw"
+                className="object-contain"
+              />
+            ) : (
+              <ImageIcon className="m-auto size-16 text-muted-foreground" aria-hidden="true" />
+            )}
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

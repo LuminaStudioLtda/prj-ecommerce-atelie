@@ -61,7 +61,7 @@ export function RegisterForm() {
     setIsSubmitting(true);
     await mockAuthenticate();
     login({ name: name.trim(), email: email.trim().toLowerCase() });
-    router.push("/home");
+    router.push("/inicio");
   }
 
   return (
