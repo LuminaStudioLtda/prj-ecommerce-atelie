@@ -55,7 +55,7 @@ export function LoginForm() {
     setIsSubmitting(true);
     await mockAuthenticate();
     login({ name: nameFromEmail(email), email: email.trim().toLowerCase() });
-    router.push("/home");
+    router.push("/inicio");
   }
 
   return (
@@ -111,6 +111,14 @@ export function LoginForm() {
             className="font-medium text-foreground underline-offset-4 hover:underline"
           >
             Cadastre-se
+          </Link>
+        </p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          <Link
+            href="/inicio"
+            className="font-medium text-foreground underline-offset-4 hover:underline"
+          >
+            Continuar sem entrar
           </Link>
         </p>
       </CardContent>

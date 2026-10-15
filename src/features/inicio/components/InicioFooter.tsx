@@ -3,6 +3,7 @@ import Link from "next/link";
 import { MaterialIcon } from "@/components/MaterialIcon";
 import { NewsletterForm } from "@/features/inicio/components/NewsletterForm";
 import { FOOTER_CARE_LINKS, FOOTER_NAVIGATION_LINKS } from "@/features/inicio/constants";
+import { FAQ_HREF, SOCIAL_LINKS } from "@/lib/social-links";
 
 const LINK_CLASS = "text-body-sm text-on-surface-variant transition-colors hover:text-primary";
 const SOCIAL_CLASS =
@@ -39,15 +40,29 @@ export function InicioFooter() {
               Ateliê independente dedicado ao cultivo de peças com alma para acolher o lar e o espírito.
             </p>
             <div className="flex items-center gap-space-sm pt-space-xs text-primary">
-              <a href="#" title="Instagram" aria-label="Instagram" className={SOCIAL_CLASS}>
+              <a
+                href={SOCIAL_LINKS.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Instagram"
+                aria-label="Instagram"
+                className={SOCIAL_CLASS}
+              >
                 <MaterialIcon name="photo_camera" className="text-[18px]" />
               </a>
-              <a href="#" title="Pinterest" aria-label="Pinterest" className={SOCIAL_CLASS}>
+              <a
+                href={SOCIAL_LINKS.pinterest}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Pinterest"
+                aria-label="Pinterest"
+                className={SOCIAL_CLASS}
+              >
                 <MaterialIcon name="push_pin" className="text-[18px]" />
               </a>
-              <a href="#" title="WhatsApp" aria-label="WhatsApp" className={SOCIAL_CLASS}>
+              <Link href="/contato" title="Fale conosco" aria-label="Fale conosco" className={SOCIAL_CLASS}>
                 <MaterialIcon name="chat" className="text-[18px]" />
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -63,9 +78,9 @@ export function InicioFooter() {
           <div className="flex flex-col gap-space-sm">
             <h5 className="mb-space-xs text-label-lg tracking-wider text-on-surface uppercase">Cuidado &amp; Informação</h5>
             {FOOTER_CARE_LINKS.map((label) => (
-              <a key={label} href="#" className={LINK_CLASS}>
+              <Link key={label} href={FAQ_HREF} className={LINK_CLASS}>
                 {label}
-              </a>
+              </Link>
             ))}
           </div>
 
@@ -93,8 +108,8 @@ export function InicioFooter() {
         <div className="flex flex-col items-center justify-between gap-space-sm pt-space-md text-body-sm text-outline md:flex-row">
           <p>© 2025 Fio de Afeto Ateliê Artesanal. Todos os direitos reservados. CNPJ 00.000.000/0001-00.</p>
           <div className="flex items-center gap-space-md">
-            <a href="#" className="transition-colors hover:text-primary">Termos de Uso</a>
-            <a href="#" className="transition-colors hover:text-primary">Privacidade</a>
+            <Link href="/contato" className="transition-colors hover:text-primary">Termos de Uso</Link>
+            <Link href="/contato" className="transition-colors hover:text-primary">Privacidade</Link>
             <Link href="/contato" className="transition-colors hover:text-primary">Atendimento</Link>
           </div>
         </div>

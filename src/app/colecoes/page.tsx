@@ -1,5 +1,5 @@
-import { PlaceholderPage } from "@/components/placeholder-page";
+import { redirect } from "next/navigation";
 
 export default function ColecoesPage() {
-  return <PlaceholderPage title="Coleções" />;
+  redirect("/loja");
 }

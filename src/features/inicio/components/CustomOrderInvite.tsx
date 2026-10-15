@@ -22,15 +22,15 @@ export function CustomOrderInvite() {
                 className="inline-flex items-center justify-center gap-space-xs rounded-[0.25rem] bg-primary px-space-lg py-3.5 text-center text-label-lg text-on-primary shadow-md transition-all hover:bg-primary-container"
               >
                 <MaterialIcon name="chat" className="text-[20px]" />
-                <span>Falar via WhatsApp</span>
+                <span>Solicitar Orçamento</span>
               </Link>
-              <a
-                href="#"
+              <Link
+                href="/loja"
                 className="inline-flex items-center justify-center gap-space-xs rounded-[0.25rem] bg-surface-container-lowest px-space-lg py-3.5 text-center text-label-lg text-on-surface shadow-sm transition-all hover:bg-surface"
               >
-                <MaterialIcon name="download" className="text-[20px]" />
-                <span>Baixar Catálogo Corporativo</span>
-              </a>
+                <MaterialIcon name="storefront" className="text-[20px]" />
+                <span>Ver Catálogo de Peças</span>
+              </Link>
             </div>
           </div>
         </div>
